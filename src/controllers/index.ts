@@ -1,4 +1,8 @@
-import { login, refreshToken, register } from "./authController/authController";
+import {
+  login,
+  refreshToken,
+  registration,
+} from "./authController/authController";
 import {
   createUser,
   getUserByEmail,
@@ -10,7 +14,7 @@ import {
 export {
   login,
   refreshToken,
-  register,
+  registration,
   createUser,
   getUserById,
   getUserByEmail,
