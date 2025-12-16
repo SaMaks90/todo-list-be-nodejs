@@ -7,4 +7,6 @@ interface IUser {
   updated_at: Date;
 }
 
-export type { IUser };
+type IProfileUser = Omit<IUser, "password">;
+
+export type { IUser, IProfileUser };

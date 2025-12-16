@@ -4,8 +4,13 @@ General Routes:
 - GET /database/init - init database
 
 Auth Routes:
-- POST /auth/login - login user
+- POST /api/auth/login - login user
   - body: { email, password }
   - response: { token }
-- POST /auth/register - register
-- POST /auth/refresh - refresh token
+- POST /api/auth/register - register
+  - body: { email, password, username }
+  - response: { message }
+- GET /api/auth/refresh - refresh token
+  - response: { token }
+- GET /api/auth/profile - get the user profile without a hash password
+  - response: { id, email, username, created_at, updated_at }

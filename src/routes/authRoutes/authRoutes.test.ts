@@ -1,7 +1,7 @@
 // import request from "supertest";
 // import express, { Request, Response, NextFunction } from "express";
 // import userRoutes from "./authRoutes";
-// import { registration } from "../../controllers";
+// import { registration } from "../../models";
 //
 // const app = express();
 //

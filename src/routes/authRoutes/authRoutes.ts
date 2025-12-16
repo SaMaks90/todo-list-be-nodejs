@@ -1,6 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { login, refreshToken, registration } from "../../controllers";
-import { ILoginBody, IRegistrationBody } from "../../types";
+import {
+  login,
+  refreshToken,
+  registration,
+  getUserById,
+  updateUser,
+} from "../../models";
+import { ILoginBody, IProfileUser, IRegistrationBody } from "../../types";
 import { authMiddleware } from "../../middleware";
 
 const router: Router = Router();
@@ -37,12 +43,55 @@ router.post(
 router.get(
   "/refresh-token",
   authMiddleware,
-  async (req: Request, res: Response) => {
-    const { id: userId } = req.user;
-    const token = await refreshToken(userId);
-    res.status(200).json({
-      ...token,
-    });
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id: userId } = req.user;
+      const token: { token: string } = await refreshToken(userId);
+      res.status(200).json({
+        ...token,
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+router.get(
+  "/profile",
+  authMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id: userId } = req.user;
+      const user: IProfileUser = await getUserById(userId);
+      res.status(200).json({
+        ...user,
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+router.post(
+  "/profile",
+  authMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id: userId } = req.user;
+      const data: { email?: string; username?: string } = req.body;
+      let profileData: IProfileUser = await getUserById(userId);
+      const updatingProfileData = {
+        ...profileData,
+        ...data,
+        updated_at: new Date(),
+      };
+      await updateUser(userId, updatingProfileData);
+      profileData = await getUserById(userId);
+
+      res.status(200).json({ ...profileData });
+    } catch (e) {
+      next(e);
+    }
   },
 );
 
