@@ -1,6 +1,6 @@
 import { QueryResult } from "pg";
 import { pool } from "../../config/db";
-import { IProfileUser, IUser } from "../../types/";
+import { IProfileUser, IUser } from "../../types";
 
 const createUser = async (
   email: string,

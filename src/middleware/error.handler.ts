@@ -7,9 +7,9 @@ interface IError {
 
 export const errorHandler = (
   err: IError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
   console.error(err);
   const { message = "Internal server error", status = 404 } = err;

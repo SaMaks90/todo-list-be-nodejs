@@ -1,3 +1,3 @@
-import authRoutes from "./authRoutes/authRoutes";
+import authRoutes from "./auth/auth.routes";
 
 export { authRoutes };

@@ -1,4 +1,4 @@
-import { errorHandler } from "./errorHandler";
-import authMiddleware from "./authMiddleware";
+import { errorHandler } from "./error.handler";
+import authMiddleware from "./auth.middleware";
 
 export { errorHandler, authMiddleware };
