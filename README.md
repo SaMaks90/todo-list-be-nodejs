@@ -14,6 +14,8 @@ Auth Routes:
   - response: { token }
 - GET /api/auth/profile - get the user profile without a hash password
   - response: { id, email, username, created_at, updated_at }
-- POST /api/auth/profile - update profile data
+- PATCH /api/auth/profile - update profile data
   - body: { ?email, ?username }}
   - response: { id, email, username, created_at, updated_at }
+- DELETE /api/auth/profile - delete user
+  - response: { message }

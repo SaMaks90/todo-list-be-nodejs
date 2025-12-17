@@ -12,19 +12,20 @@ import * as userService from "../../services/user/user.service";
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password }: ILoginBody = req.body;
-    const user: IUser = await userService.getUserByEmail(email);
+    const user: IUser | null = await userService.getUserByEmail(email);
 
     if (!user) {
       const error = new Error("User not found");
       (error as any).status = 404;
-      next(error);
+      return next(error);
     }
+
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
       const error = new Error("Invalid password");
       (error as any).status = 401;
-      next(error);
+      return next(error);
     }
     const token = await initRefreshToken(user.id);
     res.status(200).json({
@@ -43,12 +44,12 @@ const registration = async (
   try {
     const data: IRegistrationBody = req.body;
     const { email, username, password } = data;
-    const user = await userService.getUserByEmail(email);
+    const user: IUser | null = await userService.getUserByEmail(email);
 
     if (user) {
       let error = new Error("User already exists");
       (error as any).status = 409;
-      next(error);
+      return next(error);
     }
 
     const hashPassword = await hash(password, 10);
@@ -79,7 +80,7 @@ const refreshToken = async (
 const getProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id: userId } = req.user;
-    const user: IProfileUser = await userService.getUserById(userId);
+    const user: IProfileUser | null = await userService.getUserById(userId);
     res.status(200).json({
       ...user,
     });
@@ -88,7 +89,7 @@ const getProfile = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createProfile = async (
+const updateProfile = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -96,16 +97,40 @@ const createProfile = async (
   try {
     const { id: userId } = req.user;
     const data: { email?: string; username?: string } = req.body;
-    let profileData: IProfileUser = await userService.getUserById(userId);
+    let profileData: IProfileUser | null =
+      await userService.getUserById(userId);
+
+    if (!profileData) {
+      const error = new Error("User not found");
+      (error as any).status = 404;
+      return next(error);
+    }
+
     const updatingProfileData = {
       ...profileData,
       ...data,
       updated_at: new Date(),
     };
-    await userService.updateUser(userId, updatingProfileData);
-    profileData = await userService.getUserById(userId);
+    const updatedProfile: IProfileUser = await userService.updateUser(
+      userId,
+      updatingProfileData,
+    );
 
-    res.status(200).json({ ...profileData });
+    res.status(200).json({ ...updatedProfile });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const deleteProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id: userId } = req.user;
+    await userService.deleteUser(userId);
+    res.status(200).json({ message: "User successfully deleted" });
   } catch (e) {
     next(e);
   }
@@ -121,4 +146,11 @@ const initRefreshToken = async (userId: string): Promise<{ token: string }> => {
   return { token };
 };
 
-export { login, registration, getProfile, createProfile, refreshToken };
+export {
+  login,
+  registration,
+  getProfile,
+  updateProfile,
+  deleteProfile,
+  refreshToken,
+};

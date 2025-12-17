@@ -8,6 +8,7 @@ router.post("/login", authController.login);
 router.post("/registration", authController.registration);
 router.get("/refresh-token", authMiddleware, authController.refreshToken);
 router.get("/profile", authMiddleware, authController.getProfile);
-router.post("/profile", authMiddleware, authController.createProfile);
+router.patch("/profile", authMiddleware, authController.updateProfile);
+router.delete("/profile", authMiddleware, authController.deleteProfile);
 
 export default router;
