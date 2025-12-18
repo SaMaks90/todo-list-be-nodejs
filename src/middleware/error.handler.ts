@@ -5,7 +5,7 @@ interface IError {
   status: number;
 }
 
-export const errorHandler = (
+const errorHandler = (
   err: IError,
   _req: Request,
   res: Response,
@@ -15,3 +15,5 @@ export const errorHandler = (
   const { message = "Internal server error", status = 404 } = err;
   res.status(status).json({ error: message });
 };
+
+export default errorHandler;
