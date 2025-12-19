@@ -15,4 +15,18 @@ const validateBody =
     next();
   };
 
-export default validateBody;
+const validateParams =
+  <T extends z.ZodType<any>>(schema: T) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.params);
+
+    if (!result.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid parameters", details: result.error.flatten() });
+
+    (req as any).params = result.data;
+    next();
+  };
+
+export { validateBody, validateParams };
