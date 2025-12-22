@@ -1,10 +1,10 @@
 import request from "supertest";
 import express, { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import initDb from "./config/initDb";
-import { authMiddleware } from "./middleware";
-import { projectRoutes } from "./routes";
-import * as projectController from "./controllers/project/project.controllers";
+import initDb from "../config/initDb";
+import { authMiddleware } from "../middleware";
+import { projectRoutes } from "../routes";
+import * as projectController from "../controllers/project/project.controllers";
 
 const app = express();
 app.use(express.json());
@@ -21,7 +21,7 @@ app.use((req, res) => {
 });
 
 jest.mock("jsonwebtoken");
-jest.mock("./controllers/project/project.controllers");
+jest.mock("../controllers/project/project.controllers");
 
 describe("General app test", () => {
   it("Should return 404 and error message", async () => {
