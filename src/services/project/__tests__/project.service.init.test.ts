@@ -1,5 +1,6 @@
 import { pool } from "../../../config/db";
 import {
+  checkDuplicateProject,
   createProject,
   getProjectById,
   getProjects,
@@ -104,5 +105,25 @@ describe("project.service", () => {
       name: "Updated project",
       updated_at: updatedProject.updated_at,
     });
+  });
+
+  it("should check duplicate project and return true", async () => {
+    const existProject: boolean = await checkDuplicateProject(
+      "Updated project",
+      createdProject.owner_id,
+    );
+
+    expect(existProject).toBeDefined();
+    expect(existProject).toBeTruthy();
+  });
+
+  it("should check duplicate project and return false", async () => {
+    const existProject: boolean = await checkDuplicateProject(
+      "test testing project",
+      createdProject.owner_id,
+    );
+
+    expect(existProject).toBeDefined();
+    expect(existProject).toBeFalsy();
   });
 });

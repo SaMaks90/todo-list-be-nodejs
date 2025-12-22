@@ -2,6 +2,18 @@ import { QueryResult } from "pg";
 import { pool } from "../../config/db";
 import { IProject } from "../../types";
 
+const checkDuplicateProject = async (
+  name: string,
+  ownerId: string,
+): Promise<boolean> => {
+  const result: QueryResult<{ count: number }> = await pool.query(
+    "SELECT id FROM projects WHERE name = $1 AND owner_id = $2",
+    [name, ownerId],
+  );
+
+  return !!result.rows.length;
+};
+
 const getProjects = async (ownerId: string): Promise<Array<IProject>> => {
   const result: QueryResult<Array<IProject>> = await pool.query(
     "SELECT * FROM projects WHERE owner_id = $1",
@@ -46,4 +58,10 @@ const updateProject = async (data: {
   return result.rows[0] as IProject;
 };
 
-export { getProjects, createProject, updateProject, getProjectById };
+export {
+  getProjects,
+  createProject,
+  updateProject,
+  getProjectById,
+  checkDuplicateProject,
+};
