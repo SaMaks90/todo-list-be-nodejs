@@ -17,14 +17,12 @@ interface IJwtPayload {
 
 const authMiddleware = async (
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    const error = new Error("Invalid authorization header");
-    (error as any).status = 401;
-    throw error;
+    return res.status(401).json({ error: "Invalid authorization header" });
   }
 
   const token: string = authHeader.split(" ")[1];
