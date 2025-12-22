@@ -11,6 +11,14 @@ const getProjects = async (ownerId: string): Promise<Array<IProject>> => {
   return (result.rows || []) as Array<IProject> | [];
 };
 
+const getProjectById = async (projectId: string): Promise<IProject | null> => {
+  const result: QueryResult<IProject> = await pool.query(
+    "SELECT * FROM projects WHERE id = $1",
+    [projectId],
+  );
+  return (result.rows[0] || null) as IProject | null;
+};
+
 const createProject = async (data: {
   name: string;
   ownerId: string;
@@ -38,4 +46,4 @@ const updateProject = async (data: {
   return result.rows[0] as IProject;
 };
 
-export { getProjects, createProject, updateProject };
+export { getProjects, createProject, updateProject, getProjectById };

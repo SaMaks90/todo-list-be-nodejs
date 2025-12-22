@@ -1,5 +1,10 @@
 import { pool } from "../../../config/db";
-import { createProject, getProjects, updateProject } from "../project.service";
+import {
+  createProject,
+  getProjectById,
+  getProjects,
+  updateProject,
+} from "../project.service";
 import { createUser, getUserByEmail } from "../../user/user.service";
 import { IProject, IProfileUser, IUser } from "../../../types";
 
@@ -61,6 +66,22 @@ describe("project.service", () => {
 
     expect(projectData).toBeDefined();
     expect(projectData).toStrictEqual(createdProject);
+  });
+
+  it("should get project by id and return object project data", async () => {
+    const projectData: IProject | null = await getProjectById(
+      createdProject.id,
+    );
+
+    expect(projectData).toBeDefined();
+    expect(projectData).toStrictEqual(createdProject);
+  });
+
+  it("should get project by id and return null", async () => {
+    const projectData: IProject | null = await getProjectById(
+      "e17176d0-d773-4fb6-8659-5f039119bce9",
+    );
+    expect(projectData).toBeNull();
   });
 
   it("should get projects and return array project data", async () => {
