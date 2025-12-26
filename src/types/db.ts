@@ -17,11 +17,19 @@ interface IProject {
   updated_at: Date;
 }
 
+const Roles = {
+  member: "member",
+  owner: "owner",
+} as const;
+
+type Role = (typeof Roles)[keyof typeof Roles];
+
 interface IProjectMember {
   id: string;
   user_id: string;
   project_id: string;
-  role: string;
+  role: Role;
 }
 
-export type { IUser, IProfileUser, IProject, IProjectMember };
+export { Roles };
+export type { IUser, IProfileUser, IProject, IProjectMember, Role };
