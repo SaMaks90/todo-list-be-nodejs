@@ -7,6 +7,7 @@ import {
   projectUpdateSchema,
 } from "../../validation/project.schema";
 import { validateParams } from "../../middleware/validate";
+import projectMemberRoutes from "../project.member/project.member.routes";
 
 const router: Router = Router();
 
@@ -23,5 +24,6 @@ router.put(
   validateBody(projectUpdateSchema),
   projectController.updateProject,
 );
+router.use("/:project_id/members", projectMemberRoutes);
 
 export default router;
