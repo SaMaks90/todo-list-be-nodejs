@@ -9,6 +9,8 @@ import {
 
 const router: Router = Router();
 
+router.get("/", projectMemberController.getProjectMembers);
+
 router.post(
   "/",
   validateBody(projectMemberSchema),
