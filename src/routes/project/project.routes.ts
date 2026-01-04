@@ -1,12 +1,15 @@
 import { Router } from "express";
 import * as projectController from "../../controllers/project/project.controllers";
-import { validateBody } from "../../middleware";
+import {
+  validateBody,
+  validateParams,
+  projectExistsMiddleware,
+} from "../../middleware";
 import {
   projectIdSchema,
   projectSchema,
   projectUpdateSchema,
 } from "../../validation/project.schema";
-import { validateParams } from "../../middleware/validate";
 import projectMemberRoutes from "../project.member/project.member.routes";
 
 const router: Router = Router();
@@ -24,6 +27,11 @@ router.put(
   validateBody(projectUpdateSchema),
   projectController.updateProject,
 );
-router.use("/:project_id/members", projectMemberRoutes);
+router.use(
+  "/:project_id/members",
+  validateParams(projectIdSchema),
+  projectExistsMiddleware,
+  projectMemberRoutes,
+);
 
 export default router;
