@@ -20,16 +20,37 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Invalid authorization header" });
-  }
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      const error = new Error("Invalid authorization header");
+      (error as any).status = 401;
+      return next(error);
+    }
 
-  const token: string = authHeader.split(" ")[1];
-  const secretKey: string = process.env.SECRET_KEY || "secret";
-  const decodedToken = verify(token, secretKey) as IJwtPayload;
-  req.user = { id: decodedToken.userId };
-  next();
+    const token: string = authHeader.split(" ")[1];
+    if (!token || token.trim().length === 0) {
+      const error = new Error("Invalid token");
+      (error as any).status = 401;
+      return next(error);
+    }
+
+    const secretKey: string = process.env.SECRET_KEY || "secret";
+    const decodedToken = verify(token, secretKey) as IJwtPayload;
+
+    if (!decodedToken.userId) {
+      const error = new Error("Invalid token payload");
+      (error as any).status = 401;
+      return next(error);
+    }
+
+    req.user = { id: decodedToken.userId };
+    next();
+  } catch (e) {
+    const error = new Error("Invalid token");
+    (error as any).status = 401;
+    next(error);
+  }
 };
 
 export default authMiddleware;
