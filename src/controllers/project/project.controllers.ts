@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IProject } from "../../types";
 import * as projectService from "../../services/project/project.service";
+import * as projectMemberService from "../../services/project.member/project.member.service";
 
 const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -50,6 +51,8 @@ const createProject = async (
       ownerId: userId,
       name,
     });
+
+    await projectMemberService.addMemberToProject(project.id, userId, "owner");
 
     res.status(201).json({ ...project });
   } catch (e) {
