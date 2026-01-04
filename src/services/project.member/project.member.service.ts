@@ -2,6 +2,19 @@ import { QueryResult } from "pg";
 import { pool } from "../../config/db";
 import { Role, IProjectMember } from "../../types";
 
+const getProjectMembersInProject = async (
+  projectId: string,
+): Promise<Array<IProjectMember>> => {
+  const result: QueryResult<Array<IProjectMember>> = await pool.query(
+    `
+    SELECT * FROM project_members WHERE project_id = $1
+  `,
+    [projectId],
+  );
+
+  return (result.rows || []) as Array<IProjectMember> | [];
+};
+
 const getProjectMemberInProject = async (
   projectId: string,
   userId: string,
@@ -61,4 +74,5 @@ export {
   addMemberToProject,
   updateMemberRoleInProject,
   deleteMemberFromProject,
+  getProjectMembersInProject,
 };

@@ -65,6 +65,14 @@ describe("Project Member", () => {
     expect(result).toHaveProperty("role", Roles.member);
   });
 
+  it("Should get project members data", async () => {
+    const result =
+      await projectMemberService.getProjectMembersInProject(projectId);
+
+    expect(result).toBeDefined();
+    expect(result).toHaveLength(1);
+  });
+
   it("Should delete project member data and return id", async () => {
     const result =
       await projectMemberService.deleteMemberFromProject(projectMemberId);
