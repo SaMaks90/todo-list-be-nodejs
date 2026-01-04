@@ -4,7 +4,7 @@ declare global {
       user: {
         id: string;
       };
-      projectId?: string;
+      projectId: string;
     }
   }
 }

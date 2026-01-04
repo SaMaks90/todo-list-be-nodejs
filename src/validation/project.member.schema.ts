@@ -6,7 +6,6 @@ export const projectMemberIdSchema = z.object({
 
 export const projectMemberSchema = z.object({
   user_id: z.string().uuid(),
-  project_id: z.string().uuid(),
   role: z.enum(["owner", "member"]),
 });
 

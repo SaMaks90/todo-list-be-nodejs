@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as projectMemberController from "../../controllers/project.member/project.member.controller";
-import { validateParams, validateBody } from "../../middleware/validate";
+import { validateParams, validateBody } from "../../middleware";
 import {
   projectMemberSchema,
   projectMemberIdSchema,
@@ -10,7 +10,6 @@ import {
 const router: Router = Router();
 
 router.get("/", projectMemberController.getProjectMembers);
-
 router.post(
   "/",
   validateBody(projectMemberSchema),
