@@ -29,6 +29,8 @@ interface IProjectMember {
   user_id: string;
   project_id: string;
   role: Role;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export { Roles };

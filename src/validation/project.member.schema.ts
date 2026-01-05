@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const projectMemberIdSchema = z.object({
-  id: z.string().uuid(),
+  member_id: z.string().uuid(),
 });
 
 export const projectMemberSchema = z.object({
