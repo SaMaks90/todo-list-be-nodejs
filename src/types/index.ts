@@ -1,6 +1,7 @@
 import type { IRegistrationBody, ILoginBody } from "./auth";
 import type { IUser, IProfileUser, IProject, IProjectMember, Role } from "./db";
 import { Roles } from "./db";
+import type { HttpError } from "./error";
 
 export { Roles };
 export type {
@@ -11,4 +12,5 @@ export type {
   IProjectMember,
   IProject,
   Role,
+  HttpError,
 };

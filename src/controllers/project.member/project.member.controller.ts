@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as projectMemberService from "../../services/project.member/project.member.service";
+import { HttpError } from "../../types";
 
 const getProjectMembers = async (
   req: Request,
@@ -32,7 +33,7 @@ const addProjectMember = async (
 
     if (existsMember) {
       const error = new Error("User already exists in project");
-      (error as any).status = 409;
+      (error as HttpError).status = 409;
       return next(error);
     }
 
@@ -63,7 +64,7 @@ const updateUserRoleInProject = async (
 
     if (!member) {
       const error = new Error("Project member id doesn't exist in project");
-      (error as any).status = 404;
+      (error as HttpError).status = 404;
       return next(error);
     }
 
@@ -96,7 +97,7 @@ const removeProjectMember = async (
 
     if (!member) {
       const error = new Error("Project member id doesn't exist in project");
-      (error as any).status = 404;
+      (error as HttpError).status = 404;
       return next(error);
     }
 

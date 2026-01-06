@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { IProject } from "../../types";
+import { IProject, HttpError } from "../../types";
 import * as projectService from "../../services/project/project.service";
 import * as projectMemberService from "../../services/project.member/project.member.service";
 
@@ -43,7 +43,7 @@ const createProject = async (
     );
     if (existProject) {
       const error = new Error("Project already exists");
-      (error as any).status = 409;
+      (error as HttpError).status = 409;
       return next(error);
     }
 
@@ -76,7 +76,7 @@ const updateProject = async (
     );
     if (existProject) {
       const error = new Error("Project already exists");
-      (error as any).status = 409;
+      (error as HttpError).status = 409;
       return next(error);
     }
 

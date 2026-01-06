@@ -1,4 +1,3 @@
-import { pool } from "../../../config/db";
 import {
   createUser,
   getUserByEmail,
@@ -14,7 +13,6 @@ let testUserId: string;
 
 describe("user.service", () => {
   beforeAll(async () => {
-    // await pool.query("DELETE FROM users");
     testEmail = "test@test.com";
     testPassword = "password123";
     testUsername = "test";

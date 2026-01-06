@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { getProjectById } from "../services/project/project.service";
+import { HttpError } from "../types";
 
 const projectExistsMiddleware = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {
@@ -12,7 +13,7 @@ const projectExistsMiddleware = async (
 
     if (!project) {
       const error = new Error("Project not found");
-      (error as any).status = 404;
+      (error as HttpError).status = 404;
       return next(error);
     }
 

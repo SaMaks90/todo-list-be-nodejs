@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { env } from "../config/env";
+import { HttpError } from "../types";
 
 interface IJwtPayload {
   userId: string;
@@ -15,14 +16,14 @@ const authMiddleware = async (
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       const error = new Error("Invalid authorization header");
-      (error as any).status = 401;
+      (error as HttpError).status = 401;
       return next(error);
     }
 
     const token: string = authHeader.split(" ")[1];
     if (!token || token.trim().length === 0) {
       const error = new Error("Invalid token");
-      (error as any).status = 401;
+      (error as HttpError).status = 401;
       return next(error);
     }
 
@@ -31,15 +32,15 @@ const authMiddleware = async (
 
     if (!decodedToken.userId) {
       const error = new Error("Invalid token payload");
-      (error as any).status = 401;
+      (error as HttpError).status = 401;
       return next(error);
     }
 
     req.user = { id: decodedToken.userId };
     next();
-  } catch (e) {
+  } catch (_e) {
     const error = new Error("Invalid token");
-    (error as any).status = 401;
+    (error as HttpError).status = 401;
     next(error);
   }
 };

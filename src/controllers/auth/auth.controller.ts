@@ -6,6 +6,7 @@ import {
   IRegistrationBody,
   IProfileUser,
   IUser,
+  HttpError,
 } from "../../types";
 import * as userService from "../../services/user/user.service";
 import { env } from "../../config/env";
@@ -17,7 +18,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     if (!user) {
       const error = new Error("User not found");
-      (error as any).status = 404;
+      (error as HttpError).status = 404;
       return next(error);
     }
 
@@ -25,7 +26,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     if (!isPasswordValid) {
       const error = new Error("Invalid password");
-      (error as any).status = 401;
+      (error as HttpError).status = 401;
       return next(error);
     }
     const token = await initRefreshToken(user.id);
@@ -48,8 +49,8 @@ const registration = async (
     const user: IUser | null = await userService.getUserByEmail(email);
 
     if (user) {
-      let error = new Error("User already exists");
-      (error as any).status = 409;
+      const error = new Error("User already exists");
+      (error as HttpError).status = 409;
       return next(error);
     }
 
@@ -98,12 +99,12 @@ const updateProfile = async (
   try {
     const { id: userId } = req.user;
     const data: { email?: string; username?: string } = req.body;
-    let profileData: IProfileUser | null =
+    const profileData: IProfileUser | null =
       await userService.getUserById(userId);
 
     if (!profileData) {
       const error = new Error("User not found");
-      (error as any).status = 404;
+      (error as HttpError).status = 404;
       return next(error);
     }
 
