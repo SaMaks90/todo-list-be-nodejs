@@ -1,24 +1,29 @@
 import * as projectMemberController from "../project.member.controller";
 import * as projectMemberService from "../../../services/project.member/project.member.service";
-import { IProjectMember } from "../../../types";
+import {
+  IProjectMember,
+  mockNext,
+  mockRequest,
+  mockResponse,
+} from "../../../types";
 
 jest.mock("../../../services/project.member/project.member.service");
 
 describe("project.member.controllers - CRUD operations", () => {
-  let req: any;
-  let res: any;
-  let next: any;
+  let req: ReturnType<typeof mockRequest>;
+  let res: ReturnType<typeof mockResponse>;
+  let next: ReturnType<typeof mockNext>;
   let member: IProjectMember;
 
   beforeEach(async () => {
     const projectId = "c3d3584d-083f-4b84-8092-27d57b12104e";
     const userId = "aec638b9-00ff-4b8a-8075-5e34f9d4aece";
-    req = {
+    req = mockRequest({
       user: { id: userId },
       params: { project_id: projectId },
       body: {},
-    };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    });
+    res = mockResponse();
     next = jest.fn();
     member = {
       id: "bbb638b9-00ff-4b8a-8075-5e34f9d4aece",
@@ -57,13 +62,13 @@ describe("project.member.controllers - CRUD operations", () => {
   });
 
   it("Should return 409 and error message when create user failed because member already exists", async () => {
-    req = {
+    req = mockRequest({
       ...req,
       body: {
         user_id: "aec638b9-00ff-4b8a-8075-5e34f9d4aece",
         role: "owner",
       },
-    };
+    });
 
     (
       projectMemberService.getProjectMemberInProject as jest.Mock
@@ -109,7 +114,8 @@ describe("project.member.controllers - CRUD operations", () => {
 
   it("Should return 200 with updated project member data", async () => {
     const updatedMember = { ...member, role: "member" };
-    req = { ...req, body: { role: "member" } };
+    req = mockRequest({ ...req, body: { role: "member" } });
+
     (
       projectMemberService.getProjectMemberInProject as jest.Mock
     ).mockResolvedValue(member);

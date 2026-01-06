@@ -10,13 +10,13 @@ const app = express();
 app.use(express.json());
 app.use("/api/projects", authMiddleware, projectRoutes);
 
-app.get("/database/init", async (req: Request, res: Response) => {
+app.get("/database/init", async (_req: Request, res: Response) => {
   const result = await initDb();
 
   res.status(result.message ? 201 : 500).send(result);
 });
 
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
@@ -41,7 +41,7 @@ describe("General app test", () => {
   it("Should return 200 when authorization ok", async () => {
     (jwt.verify as jest.Mock).mockImplementation(() => ({ userId: "123" }));
     (projectController.getProjects as jest.Mock).mockImplementation(
-      (req, res) => {
+      (_req, res) => {
         res.status(200).json([]);
       },
     );

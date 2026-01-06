@@ -9,19 +9,25 @@ import {
   updateProfile,
 } from "../auth.controller";
 import * as userService from "../../../services/user/user.service";
+import { mockRequest, mockNext, mockResponse } from "../../../types";
 
 jest.mock("../../../services/user/user.service");
 jest.mock("jsonwebtoken");
 jest.mock("bcryptjs");
 
 describe("auth.controller - login user", () => {
-  let req: any;
-  let res: any;
-  let next: jest.Mock;
+  let req: ReturnType<typeof mockRequest>;
+  let res: ReturnType<typeof mockResponse>;
+  let next: ReturnType<typeof mockNext>;
 
   beforeEach(() => {
-    req = { body: { email: "test@test.com", password: "123456" } };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    req = mockRequest({
+      body: {
+        email: "test@test.com",
+        password: "123456",
+      },
+    });
+    res = mockResponse();
     next = jest.fn();
   });
 
@@ -78,15 +84,15 @@ describe("auth.controller - login user", () => {
 });
 
 describe("auth.controller - registration user", () => {
-  let req: any;
-  let res: any;
-  let next: jest.Mock;
+  let req: ReturnType<typeof mockRequest>;
+  let res: ReturnType<typeof mockResponse>;
+  let next: ReturnType<typeof mockNext>;
 
   beforeEach(() => {
-    req = {
+    req = mockRequest({
       body: { email: "test@test.com", password: "123456", username: "test" },
-    };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    });
+    res = mockResponse();
     next = jest.fn();
   });
 
@@ -125,13 +131,18 @@ describe("auth.controller - registration user", () => {
 });
 
 describe("auth.controller - refresh token, get profile, update profile and delete profile", () => {
-  let req: any;
-  let res: any;
-  let next: jest.Mock;
+  let req: ReturnType<typeof mockRequest>;
+  let res: ReturnType<typeof mockResponse>;
+  let next: ReturnType<typeof mockNext>;
 
   beforeEach(() => {
-    req = { user: { id: "123456" }, body: { username: "test2" } };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    req = mockRequest({
+      user: {
+        id: "123456",
+      },
+      body: { username: "test2" },
+    });
+    res = mockResponse();
     next = jest.fn();
   });
 

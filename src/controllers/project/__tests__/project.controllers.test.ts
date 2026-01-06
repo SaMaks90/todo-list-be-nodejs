@@ -1,22 +1,23 @@
 import * as projectController from "../project.controllers";
 import * as projectService from "../../../services/project/project.service";
+import { mockRequest, mockResponse, mockNext, IProject } from "../../../types";
 
 jest.mock("../../../services/project/project.service");
 
 describe("project.controllers - CRUD operations", () => {
-  let req: any;
-  let res: any;
-  let next: any;
-  let createdProject: any;
-  let updatedProject: any;
+  let req: ReturnType<typeof mockRequest>;
+  let res: ReturnType<typeof mockResponse>;
+  let next: ReturnType<typeof mockNext>;
+  let createdProject: IProject;
+  let updatedProject: IProject;
 
   beforeEach(async () => {
-    req = {
+    req = mockRequest({
       user: { id: "aec638b9-00ff-4b8a-8075-5e34f9d4aece" },
       params: { project_id: "c3d3584d-083f-4b84-8092-27d57b12104e" },
       body: {},
-    };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    });
+    res = mockResponse();
     next = jest.fn();
     createdProject = {
       id: "c3d3584d-083f-4b84-8092-27d57b12104e",

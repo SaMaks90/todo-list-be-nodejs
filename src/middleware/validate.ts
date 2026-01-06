@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 
 const validateBody =
-  <T extends z.ZodType<any>>(schema: T) =>
+  <T extends z.ZodSchema>(schema: T) =>
   (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 
@@ -11,12 +11,12 @@ const validateBody =
         .status(400)
         .json({ error: "Validation error", details: result.error.flatten() });
     }
-    (req as any).body = result.data;
+    (req as Partial<Request["body"]>).body = result.data;
     next();
   };
 
 const validateParams =
-  <T extends z.ZodType<any>>(schema: T) =>
+  <T extends z.ZodSchema>(schema: T) =>
   (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.params);
 
@@ -25,7 +25,7 @@ const validateParams =
         .status(400)
         .json({ error: "Invalid parameters", details: result.error.flatten() });
 
-    (req as any).params = result.data;
+    (req as Partial<Request["body"]>).params = result.data;
     next();
   };
 

@@ -11,7 +11,6 @@ const errorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
-  console.error(err);
   const { message = "Internal server error", status = 404 } = err;
   res.status(status).json({ error: message });
 };
