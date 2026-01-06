@@ -1,9 +1,9 @@
 import { Pool } from "pg";
-import dotenv from "dotenv";
+import { env } from "./env";
 
-dotenv.config();
+const { DATABASE_URL } = env;
 
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });

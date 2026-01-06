@@ -8,6 +8,7 @@ import {
   IUser,
 } from "../../types";
 import * as userService from "../../services/user/user.service";
+import { env } from "../../config/env";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -137,11 +138,9 @@ const deleteProfile = async (
 };
 
 const initRefreshToken = async (userId: string): Promise<{ token: string }> => {
-  const token = jwt.sign(
-    { userId: userId },
-    process.env.SECRET_KEY || "secret",
-    { expiresIn: "1h" },
-  );
+  const token = jwt.sign({ userId: userId }, env.SECRET_KEY || "secret", {
+    expiresIn: "1h",
+  });
 
   return { token };
 };

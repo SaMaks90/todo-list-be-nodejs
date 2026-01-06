@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
+import { env } from "../config/env";
 
 interface IJwtPayload {
   userId: string;
@@ -25,7 +26,7 @@ const authMiddleware = async (
       return next(error);
     }
 
-    const secretKey: string = process.env.SECRET_KEY || "secret";
+    const secretKey: string = env.SECRET_KEY || "secret";
     const decodedToken = verify(token, secretKey) as IJwtPayload;
 
     if (!decodedToken.userId) {

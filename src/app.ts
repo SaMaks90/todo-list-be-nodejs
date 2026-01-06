@@ -1,12 +1,34 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import morgan from "morgan";
+import client from "prom-client";
 import { authRoutes, projectRoutes } from "./routes/";
-import { errorHandler, authMiddleware } from "./middleware/";
+import { errorHandler, authMiddleware, metricsMiddleware } from "./middleware/";
 import initDb from "./config/initDb";
+import { env } from "./config/env";
+
 const app: Express = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(metricsMiddleware);
+
+app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    env: env.NODE_ENV,
+  });
+});
+
+app.get(
+  "/api/metrics",
+  async (_req: Request, res: Response, _next: NextFunction) => {
+    res.setHeader("Content-Type", client.register.contentType);
+    res.send(await client.register.metrics());
+  },
+);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", authMiddleware, projectRoutes);
 
