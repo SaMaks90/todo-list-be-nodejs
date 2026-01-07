@@ -55,7 +55,6 @@ jobs:
 
       - name: Debug secrets
         run: |
-          echo "DATABASE URL length: ${#DATABASE_URL}"
           echo "USERNAME length: ${#DOCKERHUB_USERNAME}"
           echo "TOKEN length: ${#DOCKERHUB_TOKEN}"
         env:
@@ -79,6 +78,7 @@ jobs:
             type=sha
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -92,22 +92,26 @@ jobs:
         run: |
           echo "Starting container test..."
           
+          IMAGE=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          
+          echo "Using image: $IMAGE"
+          
           docker run -d \
             --name test-api \
             -p 3000:3000 \
             -e NODE_ENV=production \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
-            ${{ steps.build.outputs.image }}
+            $IMAGE
           
           echo "Waiting for app to start..."
           sleep 10
           
           echo "Testing /api/health"
-          curl -s http://localhost:${{ secrets.PORT }}/api/health
+          curl -s http://localhost:3000/api/health
           
           echo "Testing /api/metrics"
-          curl -s http://localhost:${{ secrets.PORT }}/api/metrics
+          curl -s http://localhost:3000/api/metrics
           
           echo "Cleaning up..."
           docker stop test-api
