@@ -44,6 +44,8 @@ jobs:
     environment: .env
     needs: lint-test-build
     runs-on: ubuntu-latest
+    outputs:
+      image_digest: ${{ steps.build.outputs.digest }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -136,7 +138,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway variables --set IMAGE_DIGEST=${{ steps.build.outputs.digest }}
+          railway variables --set IMAGE_DIGEST=${{ needs.docker-build.outputs.image_digest }}
           railway redeploy
 
       - name: Verify Railway deploy
