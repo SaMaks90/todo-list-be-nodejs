@@ -2,7 +2,7 @@ import request from "supertest";
 import express, { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import initDb from "../config/initDb";
-import { authMiddleware } from "../middleware";
+import { authMiddleware, errorHandler } from "../middleware";
 import { projectRoutes } from "../routes";
 import * as projectController from "../controllers/project/project.controllers";
 
@@ -19,6 +19,7 @@ app.get("/database/init", async (_req: Request, res: Response) => {
 app.use((_req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
+app.use(errorHandler);
 
 jest.mock("jsonwebtoken");
 jest.mock("../controllers/project/project.controllers");
@@ -55,7 +56,10 @@ describe("General app test", () => {
   });
 
   it("Should return 401 when authorization badly", async () => {
-    const response = await request(app).get("/api/projects");
+    const response = await request(app)
+      .get("/api/projects")
+      .set("Authorization", "Test Test");
+
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Invalid authorization header" });
   });

@@ -1,8 +1,10 @@
 import * as projectController from "../project.controllers";
 import * as projectService from "../../../services/project/project.service";
+import * as projectMemberService from "../../../services/project.member/project.member.service";
 import { mockRequest, mockResponse, mockNext, IProject } from "../../../types";
 
 jest.mock("../../../services/project/project.service");
+jest.mock("../../../services/project.member/project.member.service");
 
 describe("project.controllers - CRUD operations", () => {
   let req: ReturnType<typeof mockRequest>;
@@ -49,11 +51,15 @@ describe("project.controllers - CRUD operations", () => {
   });
 
   it("should return 201 with project data", async () => {
+    req.body = { name: "Test Project" };
     (projectService.createProject as jest.Mock).mockResolvedValue(
       createdProject,
     );
     (projectService.checkDuplicateProject as jest.Mock).mockResolvedValue(
       false,
+    );
+    (projectMemberService.addMemberToProject as jest.Mock).mockResolvedValue(
+      undefined,
     );
 
     await projectController.createProject(req, res, next);

@@ -5,6 +5,12 @@ const config: Config.InitialOptions = {
   testEnvironment: "node",
   verbose: true,
   setupFilesAfterEnv: ["./test/setup.ts"],
+  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+  clearMocks: true,
+  resetModules: true,
+  restoreMocks: true,
+  maxWorkers: "1",
+  detectOpenHandles: true,
 };
 
 export default config;
