@@ -41,6 +41,7 @@ jobs:
         run: ls -la dist/server.js || exit 1
   docker-build:
     name: Docker Build and Push
+    environment: .env
     needs: lint-test-build
     runs-on: ubuntu-latest
     steps:
@@ -54,6 +55,7 @@ jobs:
 
       - name: Debug secrets
         run: |
+          echo "DATABASE URL length: ${#DATABASE_URL}"
           echo "USERNAME length: ${#DOCKERHUB_USERNAME}"
           echo "TOKEN length: ${#DOCKERHUB_TOKEN}"
         env:
