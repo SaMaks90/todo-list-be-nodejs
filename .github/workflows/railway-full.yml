@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Docker Buildx
+      - name: Setup Docker Build
         uses: docker/setup-buildx-action@v3
 
       - name: Login to DockerHub
@@ -83,12 +83,12 @@ jobs:
           echo "Starting container test..."
           
           docker run -d \
-            -- name test-api \
-            -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
+            --name test-api \
+            -p 3000:3000 \
             -e NODE_ENV=production \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
-            ${{ steps.build.outputs.image }
+            ${{ steps.build.outputs.image }}
           
           echo "Waiting for app to start..."
           sleep 10
