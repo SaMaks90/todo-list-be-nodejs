@@ -137,18 +137,18 @@ jobs:
           PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
           SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
           DIGEST: ${{ needs.docker-build.outputs.image_digest }}
-          run: |
-            curl -s -X POST https://backboard.railway.app/graphql/v2 \
-              -H "Authorization: Bearer $RAILWAY_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d '{
-                "query": "mutation Redeploy($projectId: String!, $serviceId: String!, $digest: String!) { serviceRedeploy(projectId: $projectId, serviceId: $serviceId, imageDigest: $digest) }",
-                "variables": {
-                  "projectId": "'"$PROJECT_ID"'",
-                  "serviceId": "'"$SERVICE_ID"'",
-                  "digest": "'"$DIGEST"'"
-                }
-              }'
+        run: |
+          curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer $RAILWAY_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation Redeploy($projectId: String!, $serviceId: String!, $digest: String!) { serviceRedeploy(projectId: $projectId, serviceId: $serviceId, imageDigest: $digest) }",
+              "variables": {
+                "projectId": "'"$PROJECT_ID"'",
+                "serviceId": "'"$SERVICE_ID"'",
+                "digest": "'"$DIGEST"'"
+              }
+            }'
 
       - name: Verify Railway deploy
         run: |
