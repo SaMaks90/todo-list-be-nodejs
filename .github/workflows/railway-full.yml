@@ -136,7 +136,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway variables set IMAGE_DIGEST=${{ steps.build.outputs.digest }}
+          railway variables --set IMAGE_DIGEST=${{ steps.build.outputs.digest }}
           railway redeploy
 
       - name: Verify Railway deploy
