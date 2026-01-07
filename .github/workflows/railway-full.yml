@@ -120,9 +120,6 @@ jobs:
           docker rm test-api
           echo "Docker tests passed!"
 
-      - name: Save image digest
-        run: echo "IMAGE_DIGEST=${{ steps.build.outputs.digest }}"
-
   deploy-railway:
     name: Deploy to Railway
     environment: .env
@@ -136,7 +133,7 @@ jobs:
 
       - name: Set image digest and redeploy
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
         run: |
