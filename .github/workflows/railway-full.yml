@@ -32,7 +32,7 @@ jobs:
           NODE_ENV: test
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SECRET: ${{ secrets.SECRET }}
-          PORT: ${{ secrets.PORT }
+          PORT: ${{ secrets.PORT }}
 
       - name: TypeScript Build
         run: npm run build
