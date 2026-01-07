@@ -21,7 +21,7 @@ app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-app.get("/api/health2", (_req: Request, res: Response, _next: NextFunction) => {
+app.get("/api/health3", (_req: Request, res: Response, _next: NextFunction) => {
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
