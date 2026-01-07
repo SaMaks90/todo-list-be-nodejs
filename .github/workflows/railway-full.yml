@@ -137,8 +137,13 @@ jobs:
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
         run: |
-          railway variables --set IMAGE_DIGEST=${{ needs.docker-build.outputs.image_digest }}
-          railway redeploy
+          railway variables --set IMAGE_DIGEST=${{ needs.docker-build.outputs.image_digest }} \
+            --project $RAILWAY_PROJECT_ID \
+            --service $RAILWAY_SERVICE_ID
+          
+          railway redeploy \
+            --project $RAILWAY_PROJECT_ID \
+            --service $RAILWAY_SERVICE_ID
 
       - name: Verify Railway deploy
         run: |
