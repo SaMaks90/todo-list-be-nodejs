@@ -120,3 +120,41 @@ jobs:
 
       - name: Save image digest
         run: echo "IMAGE_DIGEST=${{ steps.build.outputs.digest }}"
+
+  deploy-railway:
+    name: Deploy to Railway
+    environment: .env
+    needs: docker-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Set image digest and redeploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway variables set IMAGE_DIGEST=${{ steps.build.outputs.digest }}
+          railway redeploy
+
+      - name: Verify Railway deploy
+        run: |
+          echo "Waiting for Railway to become healthy..."
+
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              ${{ secrets.RAILWAY_APP_URL }}/api/health)
+
+            if [ "$STATUS" = "200" ]; then
+              echo "Railway is healthy!"
+              exit 0
+            fi
+
+            echo "Not ready yet (status $STATUS), retrying..."
+            sleep 10
+          done
+
+          echo "Railway did not become healthy in time"
+          exit 1
