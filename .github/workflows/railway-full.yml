@@ -4,7 +4,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+concurrency:
+  group: production
+  cancel-in-progress: true
 jobs:
   lint-test-build:
     name: Lint, Test and Build
@@ -110,7 +112,7 @@ jobs:
           sleep 10
           
           echo "Testing /api/health"
-          curl -s http://localhost:3000/api/health
+          curl -sf http://localhost:3000/api/health
           
           echo "Testing /api/metrics"
           curl -s http://localhost:3000/api/metrics
@@ -128,9 +130,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
       - name: Trigger Railway redeploy via API
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
@@ -149,6 +148,7 @@ jobs:
             }'
 
       - name: Verify Railway deploy
+        continue-on-error: true
         run: |
           echo "Waiting for Railway to become healthy..."
 
@@ -167,3 +167,40 @@ jobs:
 
           echo "Railway did not become healthy in time"
           exit 1
+
+      - name: Log deployed image
+        run: |
+          echo "Deployed image digest: ${{ needs.docker-build.outputs.image_digest }}"
+
+      - name: Rollback on failure
+        if: steps.verify.outcome == 'failure'
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+          ENV_ID: ${{ secrets.RAILWAY_ENVIRONMENT_ID }}
+        run: |
+          echo "Rolling back..."
+          curl -s -X POST https://backboard.railway.app/graphql/v2 \
+            -H "Authorization: Bearer $RAILWAY_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation Deploy($serviceId: String!, $environmentId: String!) { serviceInstanceDeploy(serviceId: $serviceId, environmentId: $environmentId) }",
+              "variables": {
+                "serviceId": "'"$SERVICE_ID"'",
+                "environmentId": "'"$ENV_ID"'"
+              }
+            }'
+
+      - name: Notify success
+        if: success()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="✅ Deploy succeeded: ${{ github.repository }} @ ${{ github.sha }}"
+          
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="❌ Deploy failed: ${{ github.repository }} @ ${{ github.sha }}"
