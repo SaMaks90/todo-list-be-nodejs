@@ -195,13 +195,21 @@ jobs:
       - name: Notify success
         if: steps.verify.outcome == 'success'
         run: |
+          TEXT="✅ Deploy succeeded
+          Repo: ${{ github.repository }}
+          Commit: ${{ github.sha }}
+          By: ${{ github.actor }}"
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="✅ Deploy succeeded\nRepo: ${{ github.repository }}\nCommit: ${{ github.sha }}\nBy: ${{ github.actor }}"
+            -d text="$TEXT"
           
       - name: Notify failure
         if: steps.verify.outcome == 'failure'
         run: |
+          TEXT="❌ Deploy failed
+          Repo: ${{ github.repository }}
+          Commit: ${{ github.sha }}
+          By: ${{ github.actor }}"
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="❌ Deploy failed\nRepo: ${{ github.repository }}\nCommit: ${{ github.sha }}\nBy: ${{ github.actor }}"
+            -d text="$TEXT"
