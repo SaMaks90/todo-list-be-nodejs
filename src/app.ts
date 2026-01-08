@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(metricsMiddleware);
 
 app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
+  res.status(500).send("fail");
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
