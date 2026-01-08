@@ -21,15 +21,6 @@ app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-app.get("/api/health3", (_req: Request, res: Response, _next: NextFunction) => {
-  res.json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    env: env.NODE_ENV,
-  });
-});
-
 app.get(
   "/api/metrics",
   async (_req: Request, res: Response, _next: NextFunction) => {
