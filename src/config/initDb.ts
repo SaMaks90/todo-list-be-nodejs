@@ -31,6 +31,22 @@ const initDb = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(project_id, user_id)
       );
+
+      CREATE TABLE IF NOT EXISTS tasks (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        project_id UUID REFERENCES projects(id),
+        title VARCHAR(100) NOT NULL,
+        description TEXT,
+        status VARCHAR(10) NOT NULL DEFAULT 'open'
+          CHECK (status IN ('open', 'in progress', 'closed')),
+        priority VARCHAR(10) NOT NULL DEFAULT 'low'
+          CHECK (priority IN ('low', 'medium', 'high')),
+        user_id UUID REFERENCES users(id),
+        assigned_to_id UUID REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(project_id, title)
+      )
     `);
 
     console.log("Tables successfully created or already exist");
