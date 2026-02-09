@@ -33,5 +33,57 @@ interface IProjectMember {
   updated_at: Date;
 }
 
-export { Roles };
-export type { IUser, IProfileUser, IProject, IProjectMember, Role };
+const TaskStatus = {
+  open: "open",
+  inProgress: "in progress",
+  closed: "closed",
+} as const;
+
+type TaskStatusType = (typeof TaskStatus)[keyof typeof TaskStatus];
+
+const TaskPriority = {
+  low: "low",
+  medium: "medium",
+  high: "high",
+} as const;
+
+type TaskPriorityType = (typeof TaskPriority)[keyof typeof TaskPriority];
+
+interface ITask {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string;
+  status: TaskStatusType;
+  priority: TaskPriorityType;
+  user_id: string;
+  assigned_to_id: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+interface IPaginationMeta {
+  total: number;
+  count: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+interface IPaginatedResponse<T> {
+  data: T[];
+  meta: IPaginationMeta;
+}
+
+export { Roles, TaskStatus, TaskPriority };
+export type {
+  IUser,
+  IProfileUser,
+  IProject,
+  IProjectMember,
+  Role,
+  TaskStatusType,
+  TaskPriorityType,
+  ITask,
+  IPaginatedResponse,
+};
