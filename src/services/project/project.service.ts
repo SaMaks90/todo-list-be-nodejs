@@ -37,7 +37,10 @@ const createProject = async (data: {
 }): Promise<IProject> => {
   const { name, ownerId } = data;
   const result: QueryResult<IProject> = await pool.query(
-    "INSERT INTO projects (name, owner_id) VALUES ($1, $2) RETURNING id, name, owner_id, created_at, updated_at",
+    `
+      INSERT INTO projects (name, owner_id) 
+      VALUES ($1, $2) 
+      RETURNING id, name, owner_id, created_at, updated_at`,
     [name, ownerId],
   );
 
