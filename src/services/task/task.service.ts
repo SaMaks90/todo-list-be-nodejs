@@ -146,10 +146,24 @@ const updateTaskStatus = async (
 const assignUserToTask = async (
   taskId: string,
   userId: string,
+  updatedAt: Date,
 ): Promise<ITask> => {
   const result: QueryResult<ITask> = await pool.query(
-    `UPDATE tasks SET assigned_to_id = $1 WHERE id = $2 RETURNING *`,
-    [userId, taskId],
+    `UPDATE tasks SET assigned_to_id = $1, updated_at = $2 WHERE id = $3 RETURNING *`,
+    [userId, updatedAt, taskId],
+  );
+
+  return result.rows[0] as ITask;
+};
+
+const updateTaskPriority = async (
+  taskId: string,
+  priority: TaskPriorityType,
+  updatedAt: Date,
+) => {
+  const result: QueryResult<ITask> = await pool.query(
+    `UPDATE tasks SET priority = $1, updated_at = $2 WHERE id = $3 RETURNING *`,
+    [priority, updatedAt, taskId],
   );
 
   return result.rows[0] as ITask;
@@ -177,4 +191,5 @@ export {
   updateTaskStatus,
   assignUserToTask,
   getTaskByProjectIdAndTitle,
+  updateTaskPriority,
 };
