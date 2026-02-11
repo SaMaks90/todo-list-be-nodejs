@@ -84,6 +84,13 @@ const PaymentStatus = {
 
 type PaymentStatusType = (typeof PaymentStatus)[keyof typeof PaymentStatus];
 
+const AllowedTransitions: Record<PaymentStatusType, PaymentStatusType[]> = {
+  pending: [PaymentStatus.paid, PaymentStatus.failed],
+  paid: [PaymentStatus.refunded],
+  failed: [],
+  refunded: [],
+} as const;
+
 const Currency = {
   USD: "USD",
   EUR: "EUR",
@@ -105,7 +112,14 @@ interface IPayment {
   idempotency_key: string;
 }
 
-export { Roles, TaskStatus, TaskPriority, PaymentStatus, Currency };
+export {
+  Roles,
+  TaskStatus,
+  TaskPriority,
+  PaymentStatus,
+  Currency,
+  AllowedTransitions,
+};
 export type {
   IUser,
   IProfileUser,

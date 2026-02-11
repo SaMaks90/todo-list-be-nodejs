@@ -13,7 +13,14 @@ import type {
   CurrencyType,
   IPayment,
 } from "./db";
-import { Roles, TaskStatus, TaskPriority, PaymentStatus, Currency } from "./db";
+import {
+  Roles,
+  TaskStatus,
+  TaskPriority,
+  PaymentStatus,
+  Currency,
+  AllowedTransitions,
+} from "./db";
 import type { HttpError } from "./error";
 import { mockRequest, mockNext, mockResponse } from "./mocks";
 
@@ -26,6 +33,7 @@ export {
   TaskPriority,
   PaymentStatus,
   Currency,
+  AllowedTransitions,
 };
 export type {
   IRegistrationBody,
