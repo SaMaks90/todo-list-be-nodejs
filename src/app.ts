@@ -5,6 +5,7 @@ import { authRoutes, projectRoutes } from "./routes/";
 import { errorHandler, authMiddleware, metricsMiddleware } from "./middleware/";
 import initDb from "./config/initDb";
 import { env } from "./config/env";
+import { getTasks } from "./controllers/task/task.controller";
 
 const app: Express = express();
 
@@ -31,6 +32,7 @@ app.get(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", authMiddleware, projectRoutes);
+app.get("/api/tasks", authMiddleware, getTasks);
 
 app.get("/database/init", async (_req: Request, res: Response) => {
   const result = await initDb();
