@@ -75,7 +75,37 @@ interface IPaginatedResponse<T> {
   meta: IPaginationMeta;
 }
 
-export { Roles, TaskStatus, TaskPriority };
+const PaymentStatus = {
+  pending: "pending",
+  paid: "paid",
+  failed: "failed",
+  refunded: "refunded",
+} as const;
+
+type PaymentStatusType = (typeof PaymentStatus)[keyof typeof PaymentStatus];
+
+const Currency = {
+  USD: "USD",
+  EUR: "EUR",
+  UAH: "UAH",
+  PLN: "PLN",
+};
+
+type CurrencyType = (typeof Currency)[keyof typeof Currency];
+
+interface IPayment {
+  id: string;
+  user_id: string;
+  amount: number;
+  status: PaymentStatusType;
+  currency: CurrencyType;
+  created_at: Date;
+  updated_at: Date;
+  description: string;
+  idempotency_key: string;
+}
+
+export { Roles, TaskStatus, TaskPriority, PaymentStatus, Currency };
 export type {
   IUser,
   IProfileUser,
@@ -86,4 +116,7 @@ export type {
   TaskPriorityType,
   ITask,
   IPaginatedResponse,
+  PaymentStatusType,
+  CurrencyType,
+  IPayment,
 };

@@ -9,12 +9,24 @@ import type {
   TaskStatusType,
   TaskPriorityType,
   IPaginatedResponse,
+  PaymentStatusType,
+  CurrencyType,
+  IPayment,
 } from "./db";
-import { Roles, TaskStatus, TaskPriority } from "./db";
+import { Roles, TaskStatus, TaskPriority, PaymentStatus, Currency } from "./db";
 import type { HttpError } from "./error";
 import { mockRequest, mockNext, mockResponse } from "./mocks";
 
-export { Roles, mockRequest, mockNext, mockResponse, TaskStatus, TaskPriority };
+export {
+  Roles,
+  mockRequest,
+  mockNext,
+  mockResponse,
+  TaskStatus,
+  TaskPriority,
+  PaymentStatus,
+  Currency,
+};
 export type {
   IRegistrationBody,
   ILoginBody,
@@ -28,4 +40,7 @@ export type {
   TaskStatusType,
   TaskPriorityType,
   IPaginatedResponse,
+  PaymentStatusType,
+  CurrencyType,
+  IPayment,
 };

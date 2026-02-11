@@ -46,6 +46,27 @@ const initDb = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(project_id, title)
+      );
+
+      CREATE TYPE payment_status AS ENUM (
+        'pending',
+        'paid',
+        'failed',
+        'refunded'
+      );
+
+      CREATE TABLE IF NOT EXISTS payments (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID NOT NULL REFERENCES users(id),
+        amount INTEGER NOT NULL,
+        currency VARCHAR(3) NOT NULL DEFAULT 'USD'
+          CHECK (currency IN ('USD', 'EUR', 'UAH', 'PLN')),
+        status payment_status NOT NULL DEFAULT 'pending',
+        idempotency_key TEXT NOT NULL,
+        description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(idempotency_key)
       )
     `);
 
