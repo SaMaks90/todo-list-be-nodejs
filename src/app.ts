@@ -35,7 +35,7 @@ app.use("/api/projects", authMiddleware, projectRoutes);
 app.get("/api/tasks", authMiddleware, getTasks);
 app.use("/api/payments", authMiddleware, paymentRoutes);
 
-app.get("api/database/init", async (_req: Request, res: Response) => {
+app.get("/api/database/init", async (_req: Request, res: Response) => {
   const result = await initDb();
 
   res.status(result.message ? 201 : 500).send(result);
