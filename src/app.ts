@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import client from "prom-client";
-import { authRoutes, projectRoutes } from "./routes/";
+import { authRoutes, projectRoutes, paymentRoutes } from "./routes/";
 import { errorHandler, authMiddleware, metricsMiddleware } from "./middleware/";
 import initDb from "./config/initDb";
 import { env } from "./config/env";
@@ -33,8 +33,9 @@ app.get(
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", authMiddleware, projectRoutes);
 app.get("/api/tasks", authMiddleware, getTasks);
+app.use("/api/payments", authMiddleware, paymentRoutes);
 
-app.get("/database/init", async (_req: Request, res: Response) => {
+app.get("api/database/init", async (_req: Request, res: Response) => {
   const result = await initDb();
 
   res.status(result.message ? 201 : 500).send(result);

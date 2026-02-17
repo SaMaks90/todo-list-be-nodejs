@@ -11,6 +11,7 @@ import {
   projectUpdateSchema,
 } from "../../validation/project.schema";
 import projectMemberRoutes from "../project.member/project.member.routes";
+import tasksRoutes from "../task/task.routes";
 
 const router: Router = Router();
 
@@ -32,6 +33,12 @@ router.use(
   validateParams(projectIdSchema),
   projectExistsMiddleware,
   projectMemberRoutes,
+);
+router.use(
+  "/:project_id/tasks",
+  validateParams(projectIdSchema),
+  projectExistsMiddleware,
+  tasksRoutes,
 );
 
 export default router;
