@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "../auth.controller";
 import * as userService from "../../../services/user/user.service";
-import { mockRequest, mockNext, mockResponse } from "../../../types";
+import { mockRequest, mockNext, mockResponse } from "../../../types/mocks";
 
 jest.mock("../../../services/user/user.service");
 jest.mock("jsonwebtoken");

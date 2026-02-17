@@ -1,11 +1,7 @@
 import * as projectMemberController from "../project.member.controller";
 import * as projectMemberService from "../../../services/project.member/project.member.service";
-import {
-  IProjectMember,
-  mockNext,
-  mockRequest,
-  mockResponse,
-} from "../../../types";
+import { IProjectMember } from "../../../types";
+import { mockNext, mockRequest, mockResponse } from "../../../types/mocks";
 
 jest.mock("../../../services/project.member/project.member.service");
 

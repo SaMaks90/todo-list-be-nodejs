@@ -1,7 +1,8 @@
 import * as projectController from "../project.controllers";
 import * as projectService from "../../../services/project/project.service";
 import * as projectMemberService from "../../../services/project.member/project.member.service";
-import { mockRequest, mockResponse, mockNext, IProject } from "../../../types";
+import { mockRequest, mockResponse, mockNext } from "../../../types/mocks";
+import { IProject } from "../../../types";
 
 jest.mock("../../../services/project/project.service");
 jest.mock("../../../services/project.member/project.member.service");
