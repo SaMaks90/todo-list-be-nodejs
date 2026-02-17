@@ -49,7 +49,7 @@ const createPayment = async (
     `
       INSERT INTO payments (user_id, amount, description, idempotency_key, status, currency)
       VALUES ($1, $2, $3, $4, $5, $6)
-      ON CONFLICT (idempotency_key)
+      ON CONFLICT (user_id, idempotency_key)
         DO UPDATE SET idempotency_key = EXCLUDED.idempotency_key
       RETURNING *`,
     [

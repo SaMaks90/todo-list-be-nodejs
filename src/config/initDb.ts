@@ -60,7 +60,7 @@ const initDb = async () => {
         description TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(idempotency_key)
+        UNIQUE(idempotency_key, user_id)
       )
     `);
 
