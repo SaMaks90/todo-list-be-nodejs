@@ -1,6 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import * as paymentService from "../../services/payment/payment.service";
 import { HttpError, IPayment } from "../../types";
+import { canTransition } from "../../services/payment/payment.transitions";
 
 const getPayments = async (
   req: Request,
@@ -74,6 +75,12 @@ const changePaymentStatus = async (
   if (!payment) {
     const error = new Error("Payment not found");
     (error as HttpError).status = 404;
+    return next(error);
+  }
+
+  if (canTransition(payment.status, status)) {
+    const error = new Error("Cannot change payment status");
+    (error as HttpError).status = 400;
     return next(error);
   }
 
