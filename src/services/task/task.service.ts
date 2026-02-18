@@ -34,8 +34,8 @@ const getTasksInProject = async (
   return {
     data: (data.rows || []) as ITask[],
     meta: {
-      total: count.rows[0].count,
-      count: data.rows.length,
+      total: +count.rows[0].count,
+      count: +data.rows.length,
       page,
       limit,
       totalPages: Math.ceil(count.rows[0].count / limit),
@@ -103,6 +103,7 @@ const createTask = async (data: {
       data.description,
       data.status,
       data.priority,
+      data.assigned_to_id,
     ],
   );
 
