@@ -78,7 +78,7 @@ const changePaymentStatus = async (
     return next(error);
   }
 
-  if (canTransition(payment.status, status)) {
+  if (!canTransition(payment.status, status)) {
     const error = new Error("Cannot change payment status");
     (error as HttpError).status = 400;
     return next(error);
