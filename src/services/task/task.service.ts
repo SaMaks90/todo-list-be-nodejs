@@ -95,7 +95,7 @@ const createTask = async (data: {
   assigned_to_id: string | null;
 }) => {
   const result: QueryResult<ITask> = await pool.query(
-    `INSERT INTO tasks (user_id, project_id, title, description, status, priority, assigned_to_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+    `INSERT INTO tasks (user_id, project_id, title, description, status, priority, assigned_to_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [
       data.user_id,
       data.project_id,
