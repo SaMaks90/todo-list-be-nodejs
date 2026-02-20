@@ -40,13 +40,14 @@ const getTaskById = async (
 
 const createTask = async (req: Request, res: Response, next: NextFunction) => {
   const { projectId } = req;
+  const { id: userId } = req.user;
   const data = req.body;
   const existTask = await taskService.getTaskByProjectIdAndTitle(
     projectId,
     data.title,
   );
 
-  if (!existTask) {
+  if (existTask) {
     const error = new Error(
       "Task with this title already exists in this project.",
     );
@@ -57,7 +58,7 @@ const createTask = async (req: Request, res: Response, next: NextFunction) => {
   const createData = {
     ...data,
     project_id: projectId,
-    assigned_to_id: data?.assigned_to_id ? data?.assigned_to_id : null,
+    assigned_to_id: data?.assigned_to_id ? data?.assigned_to_id : userId,
   };
 
   const task: ITask = await taskService.createTask(createData);
@@ -71,7 +72,7 @@ const updateTask = async (req: Request, res: Response, next: NextFunction) => {
 
   const task: ITask | null = await taskService.getTaskById(taskId);
 
-  if (!task) {
+  if (task) {
     const error = new Error("Task not found");
     (error as HttpError).status = 404;
     return next(error);
