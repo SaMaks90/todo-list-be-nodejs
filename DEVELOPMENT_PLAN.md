@@ -25,33 +25,49 @@
 - Unit tests: services + controllers
 - Validation: /api/projects/ and /api/projects/:id/members
 
-## Step 3: Docker/CI/Deploy - doing
+## Step 3: Docker/CI/Deploy - done
 - Environment validation
 - Health checks /health
 - Metrics /metrics
 - Docker + docker-compose
 - CI/CD (GitHub Actions)
-- Deploy: Vercel Railway
-- Monitoring (Sentry + Prometheus)
+  - Lint, test and TS build;
+  - Docker build and push;
+  - Deploy to Railway
 
-## Step n: Tasks and Comments - planning
+## Step 4: Tasks – done
 - Models:
-  - tasks (title, description, status, priority, user_id, created_at, updated_at)
-  - comments (id, task_id, user_id, text, created_at, updated_at)
+  - tasks (id, title, description, status, priority, user_id, created_at, updated_at)
 - Services: create/read/update/delete tasks
-- Controllers: /api/tasks (CRUD and filters: status, priority)
+- Controllers: 
+  - /api/tasks (CRUD and filters: status, priority)
+  - /api/projects/:project_id/tasks (CRUD and filters)
 - Middleware: Auth middleware for tasks (only owner tasks)
-- Unit tests: services + controllers
+- Unit tests: services + controllers + routes
+
+# Step 5: Payments – done
+- Models:
+  - payments (id, user_id, amount, currency, status, idempotency_key, created_at, updated_at)
+- Services: create/read/pathces payments
+- Controllers: /api/payments (CRUD and filters by user and status)
+- Middleware: Auth middleware for payments
+- Unit tests: services + controllers + routes
+
+## Step 4: Comments - doing
+- Models:
+  - comments (id, task_id, user_id, text, created_at, updated_at)
+- Services: create/read/update/delete comments
+- Controllers: 
+  - /api/projects/:project_id/tasks/:task_id
+  - /api/tasks/:task_id/comments
+- Middleware: Auth middleware for comments
+- Unit tests: services + controllers + routes
 
 ## Step n: Advanced Features - planning
-- Task status enum (todo/in-progress/done)
-- Priority (low/medium/high)
 - Filters/Search: GET /tasks?status=done&priority=high 
 - Pagination: GET /tasks?page=1&limit=10
-- Rate limiting 
-- Logging (winston)
+- Rate limiting
 
 ## Step n: Production Ready - planning
 - Swagger docs (tsoa/swagger-jsdoc)
-- CI/CD (GitHub Actions)
-- Deploy: Vercel Railway
+- Monitoring (Sentry + Prometheus)
