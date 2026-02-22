@@ -59,6 +59,8 @@ const createTask = async (req: Request, res: Response, next: NextFunction) => {
     ...data,
     project_id: projectId,
     assigned_to_id: data?.assigned_to_id ? data?.assigned_to_id : userId,
+    status: "open",
+    priority: "low",
   };
 
   const task: ITask = await taskService.createTask(createData);
