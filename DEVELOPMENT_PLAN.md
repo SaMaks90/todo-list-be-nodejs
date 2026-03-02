@@ -53,7 +53,7 @@
 - Middleware: Auth middleware for payments
 - Unit tests: services + controllers + routes
 
-## Step 4: Comments - doing
+## Step 6: Comments - doing
 - Models:
   - comments (id, task_id, user_id, text, created_at, updated_at)
 - Services: create/read/update/delete comments
@@ -62,6 +62,10 @@
   - /api/tasks/:task_id/comments
 - Middleware: Auth middleware for comments
 - Unit tests: services + controllers + routes
+
+# Step 7: Swagger docs and Postman Collection - planning
+- Swagger docs (tsoa/swagger-jsdoc)
+- Postman Collection
 
 ## Step n: Advanced Features - planning
 - Filters/Search: GET /tasks?status=done&priority=high 
