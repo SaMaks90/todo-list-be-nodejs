@@ -12,6 +12,7 @@ import type {
   PaymentStatusType,
   CurrencyType,
   IPayment,
+  IComment,
 } from "./db";
 import {
   Roles,
@@ -47,4 +48,5 @@ export type {
   PaymentStatusType,
   CurrencyType,
   IPayment,
+  IComment,
 };

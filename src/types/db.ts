@@ -112,6 +112,15 @@ interface IPayment {
   idempotency_key: string;
 }
 
+interface IComment {
+  id: string;
+  user_id: string;
+  task_id: string;
+  content: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export {
   Roles,
   TaskStatus,
@@ -133,4 +142,5 @@ export type {
   PaymentStatusType,
   CurrencyType,
   IPayment,
+  IComment,
 };
