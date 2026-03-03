@@ -18,6 +18,7 @@ import {
   updateTaskStatus,
   updateTaskPriority,
 } from "../../controllers/task/task.controller";
+import commentRoutes from "../comment/comment.routes";
 
 const router: Router = Router();
 
@@ -49,5 +50,6 @@ router.patch(
   validateBody(taskUpdatePrioritySchema),
   updateTaskPriority,
 );
+router.use("/:task_id/comments", validateParams(taskIdSchema), commentRoutes);
 
 export default router;
