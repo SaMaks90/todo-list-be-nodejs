@@ -13,6 +13,11 @@ import {
   profileResponseSchema,
   profileUpdateRequestSchema,
 } from "./schemas/auth.schema";
+import {
+  paymentResponseSchema,
+  paymentRequestSchema,
+  paymentUpdateRequestSchema,
+} from "./schemas/payment.schema";
 
 export const swaggerSchemas = {
   Health: healthSchema,
@@ -26,4 +31,7 @@ export const swaggerSchemas = {
   RegisterResponse: registerResponseSchema,
   ProfileResponse: profileResponseSchema,
   ProfileUpdateRequest: profileUpdateRequestSchema,
+  PaymentResponse: paymentResponseSchema,
+  PaymentRequest: paymentRequestSchema,
+  PaymentUpdateStatusRequest: paymentUpdateRequestSchema,
 };
