@@ -31,7 +31,7 @@ export const swaggerSetup = (app: Express) => {
         schemas: swaggerSchemas,
       },
     },
-    apis: ["./src/routes/**/*.ts", "./src/app.ts"],
+    apis: ["./src/routes/**/*.ts", "./src/app.ts", "./dist/**/*.js"],
   };
 
   const specs = swaggerJSDoc(options);
