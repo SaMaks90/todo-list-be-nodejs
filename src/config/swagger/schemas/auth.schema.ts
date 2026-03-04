@@ -16,3 +16,38 @@ export const loginRequestSchema = {
     password: { type: "string", example: "test" },
   },
 };
+
+export const registerRequestSchema = {
+  type: "object",
+  properties: {
+    email: { type: "string", example: "test@test.test" },
+    username: { type: "string", example: "test" },
+    password: { type: "string", example: "test" },
+  },
+};
+
+export const registerResponseSchema = {
+  type: "object",
+  properties: {
+    message: { type: "string", example: "User created successfully" },
+  },
+};
+
+export const profileResponseSchema = {
+  type: "object",
+  properties: {
+    id: { type: "string", example: "7c9e1488-f038-4734-b149-d31a0127feaf" },
+    username: { type: "string", example: "Test" },
+    email: { type: "string", example: "test@test.test" },
+    created_at: { type: "string", example: "2026-03-04T09:10:50.789Z" },
+    updated_at: { type: "string", example: "2026-03-04T09:10:50.789Z" },
+  },
+};
+
+export const profileUpdateRequestSchema = {
+  type: "object",
+  properties: {
+    email: { type: "string", example: "test@test.test" },
+    username: { type: "string", example: "test" },
+  },
+};

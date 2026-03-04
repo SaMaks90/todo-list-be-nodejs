@@ -3,7 +3,7 @@ export const errorValidationSchema = {
   properties: {
     error: {
       type: "string",
-      example: "Validation error | Invalid parameters",
+      example: "Validation error | Invalid parameters | Invalid body",
     },
     details: {
       type: "object",
@@ -15,13 +15,32 @@ export const errorValidationSchema = {
   },
 };
 
-export const errorSchema = {
+export const errorNotFoundSchema = {
   type: "object",
   properties: {
     error: {
       type: "string",
-      example:
-        "Router not found | User not found | Project not found | Invalid password",
+      example: "Invalid password",
+    },
+  },
+};
+
+export const errorAlreadyExistSchema = {
+  type: "object",
+  properties: {
+    error: {
+      type: "string",
+      example: "Already exists",
+    },
+  },
+};
+
+export const errorUnauthorizedSchema = {
+  type: "object",
+  properties: {
+    error: {
+      type: "string",
+      example: "Invalid password",
     },
   },
 };

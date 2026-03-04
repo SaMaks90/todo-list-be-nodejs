@@ -4,6 +4,7 @@ import { Express } from "express";
 import { swaggerSchemas } from "./swagger/";
 
 export const swaggerSetup = (app: Express) => {
+  const isProd = process.env.NODE_ENV === "production";
   const options = {
     definition: {
       openapi: "3.0.0",
@@ -14,10 +15,9 @@ export const swaggerSetup = (app: Express) => {
       },
       servers: [
         {
-          url:
-            process.env.NODE_ENV === "production"
-              ? "https://app-production-d9c3.up.railway.app"
-              : "http://localhost:3000",
+          url: isProd
+            ? "https://app-production-d9c3.up.railway.app"
+            : "http://localhost:3000",
         },
       ],
       components: {
@@ -29,9 +29,53 @@ export const swaggerSetup = (app: Express) => {
           },
         },
         schemas: swaggerSchemas,
+        responses: {
+          NotFoundError: {
+            description: "Not Found",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ErrorNotFound",
+                },
+              },
+            },
+          },
+          AlreadyExistsError: {
+            description: "Already Exists",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ErrorAlreadyExists",
+                },
+              },
+            },
+          },
+          ValidationError: {
+            description: "Validation error",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ErrorValidation",
+                },
+              },
+            },
+          },
+          UnauthorizedError: {
+            description: "Unauthorized - JWT token missing or invalid",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ErrorUnauthorized",
+                },
+              },
+            },
+          },
+        },
       },
     },
-    apis: ["./src/routes/**/*.ts", "./src/app.ts", "./dist/**/*.js"],
+    apis: isProd
+      ? ["./dist/**/*.js"]
+      : ["./src/routes/**/*.ts", "./src/app.ts"],
   };
 
   const specs = swaggerJSDoc(options);
