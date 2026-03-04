@@ -1,7 +1,7 @@
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { Express } from "express";
-import { swaggerSchemas } from "./swagger/index";
+import { swaggerSchemas } from "./swagger/";
 
 export const swaggerSetup = (app: Express) => {
   const options = {
