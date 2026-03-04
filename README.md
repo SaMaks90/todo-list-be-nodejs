@@ -92,3 +92,20 @@ curl localhost:3000/api/health
 - DB: PostgreSQL 16 
 - Build: tsc (rootDir: "src" → dist/server.js)
 - Tools: Docker multi-stage, docker-compose, nodemon, jest
+
+## API Documentation (Swagger)
+
+Interactive API documentation is available via Swagger UI.
+
+### Local
+
+After starting the server:
+
+```bash
+npm run dev
+# or
+docker compose up -d
+```
+
+Open in browser:
+http://localhost:3000/api/docs

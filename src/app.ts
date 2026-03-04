@@ -6,6 +6,7 @@ import { errorHandler, authMiddleware, metricsMiddleware } from "./middleware/";
 import initDb from "./config/initDb";
 import { env } from "./config/env";
 import { getTasks } from "./controllers/task/task.controller";
+import { swaggerSetup } from "./config/swagger";
 
 const app: Express = express();
 
@@ -13,6 +14,23 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(metricsMiddleware);
 
+swaggerSetup(app);
+
+/**
+ * @swagger
+ * /api/health:
+ *  get:
+ *    summary: Health check
+ *    tags: [System]
+ *    description: Check the health status of the application.
+ *    responses:
+ *      200:
+ *        description: Application is healthy.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Health'
+ * */
 app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
   res.json({
     status: "ok",
@@ -22,6 +40,21 @@ app.get("/api/health", (_req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
+/**
+ * @swagger
+ * /api/metrics:
+ *  get:
+ *    summary: Prometheus format
+ *    tags: [System]
+ *    description: Returns application metrics in Prometheus format.
+ *    responses:
+ *      200:
+ *        description: Application metrics in Prometheus format.
+ *        content:
+ *          text/plain:
+ *            schema:
+ *              type: string
+ */
 app.get(
   "/api/metrics",
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -35,6 +68,35 @@ app.use("/api/projects", authMiddleware, projectRoutes);
 app.get("/api/tasks", authMiddleware, getTasks);
 app.use("/api/payments", authMiddleware, paymentRoutes);
 
+/**
+ * @swagger
+ * /api/database/init:
+ *  get:
+ *    summary: Initialize database
+ *    tags: [System]
+ *    description: Initialize the database tables.
+ *    responses:
+ *      201:
+ *        description: Database tables successfully created or already exist.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: "Tables successfully created or already exist"
+ *      500:
+ *        description: Internal server error.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: "Database initialization error: {error message}"
+ */
 app.get("/api/database/init", async (_req: Request, res: Response) => {
   const result = await initDb();
 
