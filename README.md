@@ -17,14 +17,26 @@ curl localhost:3000/api/health
 ## Structure project
 
 ```text
-├── src/
-│   ├── server.ts      # Express app + routes
-│   ├── controllers/   # Todo CRUD
-│   ├── middleware/    # Auth, validation
-│   └── config/        # DB, env
-├── dist/              # tsc build (gitignore)
-├── Dockerfile         # Multi-stage: ~100MB
-└── docker-compose.yml # API + Postgres
+├── .github/                        # Github Actions workflows (CI/CD pipelines)
+├── dist/                           # Compiled JavaScript output (TypeScript build)
+├── src/                            # Application source code
+│   ├── __tests__/                  # Integration and unit tests shared across modules
+│   ├── server.ts                   # Application entry point (Express app bootstrap)
+│   ├── controllers/                # HTTP request handlers (business logic layer)
+│   │                                   # Includes tests for controllers
+│   ├── services/                   # Data access and business services (DB queries, logic)
+│   │                                   # Includes test for services
+│   ├── routes/                     # Express route definitions (API endpoints)
+│   │                                   # Includes test for routes
+│   ├── types/                      # Global TypeScript types and interfaces
+│   ├── utils/                      # Reusable helpers functions
+│   ├── validation/                 # Request validation schemas (e.g. Zod)
+│   ├── middleware/                 # Express middleware (auth, error handling, validation)
+│   └── config/                     # Application configuration (DB, env, Swagger setup)
+│       └── swagger/                # Swagger / OpenAPI schemas
+├── test/                           # Test setup
+├── Dockerfile                      # Multi-stage Docker build (~100MB image)
+└── docker-compose.yml              # Docker Compose configuration (API + PostgreSQL)
 ```
 
 ## Option 1: Local Development

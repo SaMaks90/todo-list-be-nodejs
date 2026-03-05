@@ -19,6 +19,11 @@ import {
   paymentUpdateRequestSchema,
   paymentIdParamSchema,
 } from "./schemas/payment.schema";
+import {
+  projectResponseSchema,
+  projectIdParamSchema,
+  projectRequestSchema,
+} from "./schemas/project.schema";
 
 export const swaggerSchemas = {
   Health: healthSchema,
@@ -36,4 +41,7 @@ export const swaggerSchemas = {
   PaymentRequest: paymentRequestSchema,
   PaymentUpdateStatusRequest: paymentUpdateRequestSchema,
   PaymentIdParam: paymentIdParamSchema,
+  ProjectResponse: projectResponseSchema,
+  ProjectIdParam: projectIdParamSchema,
+  ProjectRequest: projectRequestSchema,
 };

@@ -39,6 +39,15 @@ export const swaggerSetup = (app: Express) => {
               $ref: "#/components/schemas/PaymentIdParam",
             },
           },
+          ProjectId: {
+            name: "project_id",
+            in: "path",
+            required: true,
+            description: "Project unique identifier",
+            schema: {
+              $ref: "#/components/schemas/ProjectIdParam",
+            },
+          },
         },
         responses: {
           NotFoundError: {
