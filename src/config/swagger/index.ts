@@ -17,6 +17,7 @@ import {
   paymentResponseSchema,
   paymentRequestSchema,
   paymentUpdateRequestSchema,
+  paymentIdParamSchema,
 } from "./schemas/payment.schema";
 
 export const swaggerSchemas = {
@@ -34,4 +35,5 @@ export const swaggerSchemas = {
   PaymentResponse: paymentResponseSchema,
   PaymentRequest: paymentRequestSchema,
   PaymentUpdateStatusRequest: paymentUpdateRequestSchema,
+  PaymentIdParam: paymentIdParamSchema,
 };

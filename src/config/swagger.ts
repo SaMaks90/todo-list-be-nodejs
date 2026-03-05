@@ -29,6 +29,17 @@ export const swaggerSetup = (app: Express) => {
           },
         },
         schemas: swaggerSchemas,
+        parameters: {
+          PaymentId: {
+            name: "payment_id",
+            in: "path",
+            required: true,
+            description: "Payment unique identifier",
+            schema: {
+              $ref: "#/components/schemas/PaymentIdParam",
+            },
+          },
+        },
         responses: {
           NotFoundError: {
             description: "Not Found",

@@ -45,6 +45,8 @@ router.get("/", getPayments);
  *    description: Retrieve a payment by its ID.
  *    security:
  *      - bearerAuth: []
+ *    parameters:
+ *      - $ref: '#/components/parameters/PaymentId'
  *    responses:
  *      200:
  *        content:
@@ -104,6 +106,8 @@ router.post("/", validateBody(createPaymentSchema), createPayment);
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/PaymentUpdateStatusRequest'
+ *    parameters:
+ *      - $ref: '#/components/parameters/PaymentId'
  *    responses:
  *      200:
  *        $ref: '#/components/schemas/PaymentResponse'

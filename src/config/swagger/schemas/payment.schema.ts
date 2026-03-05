@@ -3,9 +3,14 @@ import { PaymentStatus, Currency } from "../../../types";
 export const paymentResponseSchema = {
   type: "object",
   properties: {
-    id: { type: "string", example: "7c9e1488-f038-4734-b149-d31a0127feaf" },
+    id: {
+      type: "string",
+      format: "uuid",
+      example: "7c9e1488-f038-4734-b149-d31a0127feaf",
+    },
     user_id: {
       type: "string",
+      format: "uuid",
       example: "7c9e1488-f038-4734-b149-d31a0127feaf",
     },
     amount: { type: "number", example: 100.0 },
@@ -20,6 +25,7 @@ export const paymentResponseSchema = {
     description: { type: "string", example: "Payment for project X" },
     idempotency_key: {
       type: "string",
+      format: "uuid",
       example: "7c9e1488-f038-4734-b149-d31a0127feaf",
     },
   },
@@ -32,6 +38,7 @@ export const paymentRequestSchema = {
     currency: { type: "string", enum: Object.values(Currency), example: "USD" },
     idempotency_key: {
       type: "string",
+      format: "uuid",
       example: "7c9e1488-f038-4734-b149-d31a0127feaf",
     },
     description: { type: "string", example: "Payment for project X" },
@@ -52,4 +59,10 @@ export const paymentUpdateRequestSchema = {
       example: "pending",
     },
   },
+};
+
+export const paymentIdParamSchema = {
+  type: "string",
+  format: "uuid",
+  example: "7c9e1488-f038-4734-b149-d31a0127feaf",
 };
