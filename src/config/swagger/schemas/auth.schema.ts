@@ -36,7 +36,11 @@ export const registerResponseSchema = {
 export const profileResponseSchema = {
   type: "object",
   properties: {
-    id: { type: "string", example: "7c9e1488-f038-4734-b149-d31a0127feaf" },
+    id: {
+      type: "string",
+      format: "uuid",
+      example: "7c9e1488-f038-4734-b149-d31a0127feaf",
+    },
     username: { type: "string", example: "Test" },
     email: { type: "string", example: "test@test.test" },
     created_at: { type: "string", example: "2026-03-04T09:10:50.789Z" },
