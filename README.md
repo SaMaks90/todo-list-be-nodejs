@@ -18,6 +18,7 @@ curl localhost:3000/api/health
 
 ```text
 ├── .github/                        # Github Actions workflows (CI/CD pipelines)
+├── docs/                           # API documentation, architecture notes
 ├── dist/                           # Compiled JavaScript output (TypeScript build)
 ├── src/                            # Application source code
 │   ├── __tests__/                  # Integration and unit tests shared across modules

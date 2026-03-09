@@ -48,6 +48,15 @@ export const swaggerSetup = (app: Express) => {
               $ref: "#/components/schemas/ProjectIdParam",
             },
           },
+          ProjectMemberId: {
+            name: "member_id",
+            in: "path",
+            required: true,
+            description: "Project member unique identifier",
+            schema: {
+              $ref: "#/components/schemas/ProjectMemberIdParam",
+            },
+          },
         },
         responses: {
           NotFoundError: {

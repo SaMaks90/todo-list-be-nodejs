@@ -91,7 +91,7 @@ router.post("/", validateBody(projectSchema), projectController.createProject);
  * @swagger
  * /api/projects/{project_id}:
  *  put:
- *    summary: Update a project
+ *    summary: Update project
  *    tags: [Projects]
  *    description: Update a project by its ID.
  *    parameters:

@@ -24,6 +24,12 @@ import {
   projectIdParamSchema,
   projectRequestSchema,
 } from "./schemas/project.schema";
+import {
+  projectMemberResponseSchema,
+  projectMemberIdParamSchema,
+  projectMemberRequestSchema,
+  projectMemberUpdateRequestSchema,
+} from "./schemas/project.member.schema";
 
 export const swaggerSchemas = {
   Health: healthSchema,
@@ -44,4 +50,8 @@ export const swaggerSchemas = {
   ProjectResponse: projectResponseSchema,
   ProjectIdParam: projectIdParamSchema,
   ProjectRequest: projectRequestSchema,
+  ProjectMemberResponse: projectMemberResponseSchema,
+  ProjectMemberIdParam: projectMemberIdParamSchema,
+  ProjectMemberRequest: projectMemberRequestSchema,
+  ProjectMemberUpdateRequest: projectMemberUpdateRequestSchema,
 };
