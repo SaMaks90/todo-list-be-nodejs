@@ -65,6 +65,30 @@ app.get(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", authMiddleware, projectRoutes);
+
+/**
+ * @swagger
+ * /api/tasks:
+ *  get:
+ *    summary: Get all tasks
+ *    tags: [Tasks]
+ *    description: Retrieve a list of all tasks without a filter by project ID.
+ *    responses:
+ *      200:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/TaskResponse'
+ *                meta:
+ *                  $ref: '#/components/schemas/PaginationMeta'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ */
 app.get("/api/tasks", authMiddleware, getTasks);
 app.use("/api/payments", authMiddleware, paymentRoutes);
 

@@ -30,6 +30,16 @@ import {
   projectMemberRequestSchema,
   projectMemberUpdateRequestSchema,
 } from "./schemas/project.member.schema";
+import { paginationSchema } from "./schemas/pagination.schema";
+import {
+  taskResponseSchema,
+  taskIdParamSchema,
+  taskRequestSchema,
+  taskUpdateRequestSchema,
+  taskUpdatedStatusRequestSchema,
+  taskUpdatedPriorityRequestSchema,
+  taskUpdatedAssignedRequestSchema,
+} from "./schemas/task.schema";
 
 export const swaggerSchemas = {
   Health: healthSchema,
@@ -54,4 +64,12 @@ export const swaggerSchemas = {
   ProjectMemberIdParam: projectMemberIdParamSchema,
   ProjectMemberRequest: projectMemberRequestSchema,
   ProjectMemberUpdateRequest: projectMemberUpdateRequestSchema,
+  PaginationMeta: paginationSchema,
+  TaskResponse: taskResponseSchema,
+  TaskIdParam: taskIdParamSchema,
+  TaskRequest: taskRequestSchema,
+  TaskUpdateRequest: taskUpdateRequestSchema,
+  TaskUpdateStatusRequest: taskUpdatedStatusRequestSchema,
+  TaskUpdateAssignRequest: taskUpdatedAssignedRequestSchema,
+  TaskUpdatePriorityRequest: taskUpdatedPriorityRequestSchema,
 };

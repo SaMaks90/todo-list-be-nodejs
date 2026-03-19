@@ -57,6 +57,15 @@ export const swaggerSetup = (app: Express) => {
               $ref: "#/components/schemas/ProjectMemberIdParam",
             },
           },
+          TaskId: {
+            name: "task_id",
+            in: "path",
+            required: true,
+            description: "Task unique identifier",
+            schema: {
+              $ref: "#/components/schemas/TaskIdParam",
+            },
+          },
         },
         responses: {
           NotFoundError: {

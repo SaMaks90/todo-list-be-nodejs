@@ -20,7 +20,7 @@ export const errorNotFoundSchema = {
   properties: {
     error: {
       type: "string",
-      example: "Invalid password",
+      example: "Project not found | User not found",
     },
   },
 };
