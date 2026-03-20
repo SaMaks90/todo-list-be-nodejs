@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
   preset: "ts-jest",
   testEnvironment: "node",
   verbose: true,
-  setupFilesAfterEnv: ["./test/setup.ts"],
+  setupFilesAfterEnv: ["./scripts/test.setup.ts"],
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
   clearMocks: true,
   resetModules: true,
