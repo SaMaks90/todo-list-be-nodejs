@@ -66,6 +66,15 @@ export const swaggerSetup = (app: Express) => {
               $ref: "#/components/schemas/TaskIdParam",
             },
           },
+          CommentId: {
+            name: "comment_id",
+            in: "path",
+            required: true,
+            description: "Comment unique identifier",
+            schema: {
+              $ref: "#/components/schemas/CommentIdParam",
+            },
+          },
         },
         responses: {
           NotFoundError: {

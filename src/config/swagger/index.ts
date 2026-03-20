@@ -40,6 +40,11 @@ import {
   taskUpdatedPriorityRequestSchema,
   taskUpdatedAssignedRequestSchema,
 } from "./schemas/task.schema";
+import {
+  commentIdParamSchema,
+  commentResponseSchema,
+  commentRequestSchema,
+} from "./schemas/comment.schema";
 
 export const swaggerSchemas = {
   Health: healthSchema,
@@ -72,4 +77,7 @@ export const swaggerSchemas = {
   TaskUpdateStatusRequest: taskUpdatedStatusRequestSchema,
   TaskUpdateAssignRequest: taskUpdatedAssignedRequestSchema,
   TaskUpdatePriorityRequest: taskUpdatedPriorityRequestSchema,
+  CommentResponse: commentResponseSchema,
+  CommentIdParam: commentIdParamSchema,
+  CommentRequest: commentRequestSchema,
 };

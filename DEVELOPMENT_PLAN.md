@@ -73,5 +73,4 @@
 - Rate limiting
 
 ## Step n: Production Ready - planning
-- Swagger docs (tsoa/swagger-jsdoc)
 - Monitoring (Sentry + Prometheus)
