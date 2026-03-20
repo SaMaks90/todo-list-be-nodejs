@@ -102,6 +102,11 @@ router.post("/", validateBody(commentSchema), commentController.createComment);
  *      - $ref: '#/components/parameters/TaskId'
  *      - $ref: '#/components/parameters/CommentId'
  *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/CommentRequest'
  *    responses:
  *      200:
  *        content:

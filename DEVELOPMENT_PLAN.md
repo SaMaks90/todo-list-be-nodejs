@@ -63,14 +63,91 @@
 - Middleware: Auth middleware for comments
 - Unit tests: services + controllers + routes
 
-# Step 7: Swagger docs and Postman Collection - doing
+# Step 7: Swagger docs and Postman Collection – done
 - Swagger docs
 - Postman Collection
 
-## Step n: Advanced Features - planning
-- Filters/Search: GET /tasks?status=done&priority=high 
-- Pagination: GET /tasks?page=1&limit=10
-- Rate limiting
+## Step 8: API Improvements - in progress
 
-## Step n: Production Ready - planning
-- Monitoring (Sentry + Prometheus)
+### Filters
+- Filters for tasks:
+  - Extend existing endpoints: ```GET /api/tasks?status=done&priority=high&search=title```
+- Support:
+  - status
+  - priority
+  - search (ILIKE / partial math)
+- Combine with pagination ```GET /api/tasks?page=1&limit=10&status=done```
+
+### RBAC (Role-Base Access Control)
+
+## Step 9: Auth Improvements - plan
+Refresh Token Flow
+- Add:
+  - refresh_token (HTTP-only cookie)
+- Endpoints:
+```text
+POST /api/auth/login
+POST /api/auth/refresh
+POST /api/auth/logout
+```
+- Logic:
+  - store refresh token (DB or in-memory/Redis)
+  - rotate tokens 
+  - revoke on logout
+
+## Step 10: Security
+- Add middleware:
+  - helmet 
+  - CORS config 
+- Protect:
+  - rate of login attempts 
+  - headers 
+- Sanitize input:
+  - prevent XSS / injection
+
+## Step 11: Observability
+### Logging 
+- Add:
+  - pino 
+- Log:
+  - requests 
+  - errors 
+  - important business events (payments, auth)
+
+### Monitoring
+- Prometheus (already есть /metrics)
+- Add:
+  - request duration 
+  - error rate
+
+## Step 12: Rate Limiting
+- Use:
+  - express-rate-limit 
+- Apply:
+  - global limiter 
+  - stricter limiter for:
+
+```
+/api/auth/login
+```
+
+## Step 13: Repository Layer
+### Refactor architecture:
+```
+controller → service → repository → DB
+```
+
+### Responsibilities:
+- repository:
+  - pure DB queries 
+- service:
+  - business logic
+
+### Example:
+```text
+// task.repository.ts
+getTasks(filters)
+
+// task.service.ts
+validate → call repo → apply logic
+```

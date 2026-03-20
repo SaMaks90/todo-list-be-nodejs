@@ -1,0 +1,2034 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Todo List API",
+    "version": "1.0.0",
+    "description": "Todo List Backend API Documentation."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "uptime": {
+            "type": "number",
+            "example": 1000.0012
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2023-01-01T00:00:00.000Z"
+          },
+          "env": {
+            "type": "string",
+            "example": "development"
+          }
+        }
+      },
+      "ErrorValidation": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Validation error | Invalid parameters | Invalid body"
+          },
+          "details": {
+            "type": "object",
+            "example": {
+              "field": "amount",
+              "message": "must be a number"
+            }
+          }
+        }
+      },
+      "ErrorNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Project not found | User not found"
+          }
+        }
+      },
+      "ErrorAlreadyExists": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Already exists"
+          }
+        }
+      },
+      "ErrorUnauthorized": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Invalid password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZjE2YzY3YS1kMjEzLTQ3YmItYjE5YS0yZjE2NTk4YzQ5MzAiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcwOTQ5MDAwMCwiZXhwIjoxNzA5NTc2NDAwfQ.Xk3N8Yt0Lk9v2cWZz4Jm6QaB9xRtYuIoPpLmNwQrStU"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "test@test.test"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "test@test.test"
+          },
+          "username": {
+            "type": "string",
+            "example": "test"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "User created successfully"
+          }
+        }
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "username": {
+            "type": "string",
+            "example": "Test"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@test.test"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          }
+        }
+      },
+      "ProfileUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "test@test.test"
+          },
+          "username": {
+            "type": "string",
+            "example": "test"
+          }
+        }
+      },
+      "PaymentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "amount": {
+            "type": "number",
+            "example": 100
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "refunded"
+            ],
+            "example": "pending"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "USD",
+              "EUR",
+              "UAH",
+              "PLN"
+            ],
+            "example": "USD"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "description": {
+            "type": "string",
+            "example": "Payment for project X"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          }
+        }
+      },
+      "PaymentRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 100
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "USD",
+              "EUR",
+              "UAH",
+              "PLN"
+            ],
+            "example": "USD"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "description": {
+            "type": "string",
+            "example": "Payment for project X"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "refunded"
+            ],
+            "example": "pending"
+          }
+        }
+      },
+      "PaymentUpdateStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "refunded"
+            ],
+            "example": "pending"
+          }
+        }
+      },
+      "PaymentIdParam": {
+        "type": "string",
+        "format": "uuid",
+        "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+      },
+      "ProjectResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "name": {
+            "type": "string",
+            "example": "Project X"
+          },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          }
+        }
+      },
+      "ProjectIdParam": {
+        "type": "string",
+        "format": "uuid",
+        "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+      },
+      "ProjectRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Project X"
+          }
+        }
+      },
+      "ProjectMemberResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "member",
+              "owner"
+            ],
+            "example": "admin"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          }
+        }
+      },
+      "ProjectMemberIdParam": {
+        "type": "string",
+        "format": "uuid",
+        "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+      },
+      "ProjectMemberRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "member",
+              "owner"
+            ],
+            "example": "admin"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          }
+        }
+      },
+      "ProjectMemberUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "member",
+              "owner"
+            ],
+            "example": "admin"
+          }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "example": 100
+          },
+          "count": {
+            "type": "number",
+            "example": 10
+          },
+          "page": {
+            "type": "number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 10
+          }
+        }
+      },
+      "TaskResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "title": {
+            "type": "string",
+            "example": "Task X"
+          },
+          "description": {
+            "type": "string",
+            "example": "Task X description"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in progress",
+              "closed"
+            ],
+            "example": "pending"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "example": "low"
+          },
+          "assigned_id": {
+            "type": "string",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          }
+        }
+      },
+      "TaskIdParam": {
+        "type": "string",
+        "format": "uuid",
+        "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+      },
+      "TaskRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Task X"
+          },
+          "description": {
+            "type": "string",
+            "example": "Task X description"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in progress",
+              "closed"
+            ],
+            "example": "pending"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "example": "low"
+          },
+          "assigned_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          }
+        }
+      },
+      "TaskUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Task X"
+          },
+          "description": {
+            "type": "string",
+            "example": "Task X description"
+          }
+        }
+      },
+      "TaskUpdateStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in progress",
+              "closed"
+            ],
+            "example": "pending"
+          }
+        }
+      },
+      "TaskUpdateAssignRequest": {
+        "type": "object",
+        "properties": {
+          "assigned_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          }
+        }
+      },
+      "TaskUpdatePriorityRequest": {
+        "type": "object",
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "example": "low"
+          }
+        }
+      },
+      "CommentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "task_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+          },
+          "content": {
+            "type": "string",
+            "example": "Comment X"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2026-03-04T09:10:50.789Z"
+          }
+        }
+      },
+      "CommentIdParam": {
+        "type": "string",
+        "format": "uuid",
+        "example": "7c9e1488-f038-4734-b149-d31a0127feaf"
+      },
+      "CommentRequest": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "Comment X"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "PaymentId": {
+        "name": "payment_id",
+        "in": "path",
+        "required": true,
+        "description": "Payment unique identifier",
+        "schema": {
+          "$ref": "#/components/schemas/PaymentIdParam"
+        }
+      },
+      "ProjectId": {
+        "name": "project_id",
+        "in": "path",
+        "required": true,
+        "description": "Project unique identifier",
+        "schema": {
+          "$ref": "#/components/schemas/ProjectIdParam"
+        }
+      },
+      "ProjectMemberId": {
+        "name": "member_id",
+        "in": "path",
+        "required": true,
+        "description": "Project member unique identifier",
+        "schema": {
+          "$ref": "#/components/schemas/ProjectMemberIdParam"
+        }
+      },
+      "TaskId": {
+        "name": "task_id",
+        "in": "path",
+        "required": true,
+        "description": "Task unique identifier",
+        "schema": {
+          "$ref": "#/components/schemas/TaskIdParam"
+        }
+      },
+      "CommentId": {
+        "name": "comment_id",
+        "in": "path",
+        "required": true,
+        "description": "Comment unique identifier",
+        "schema": {
+          "$ref": "#/components/schemas/CommentIdParam"
+        }
+      }
+    },
+    "responses": {
+      "NotFoundError": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorNotFound"
+            }
+          }
+        }
+      },
+      "AlreadyExistsError": {
+        "description": "Already Exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorAlreadyExists"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorValidation"
+            }
+          }
+        }
+      },
+      "UnauthorizedError": {
+        "description": "Unauthorized - JWT token missing or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorUnauthorized"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authenticate user and generate JWT token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/auth/registration": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Create a new user account.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh-token": {
+      "get": {
+        "summary": "Refresh JWT token",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Generate a new JWT token using the refresh token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JWT token refreshed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/auth/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Retrieve the profile information of the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update user profile",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Update the profile information of the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user profile",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Delete the profile information of the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/tasks/{task_id}/comments": {
+      "get": {
+        "summary": "Get all comments",
+        "tags": [
+          "Comments"
+        ],
+        "description": "Retrieve a list of all comments for task.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new comment",
+        "tags": [
+          "Comments"
+        ],
+        "description": "Create a new comment for a task.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/tasks/{task_id}/comments/{comment_id}": {
+      "get": {
+        "summary": "Get comment by ID",
+        "tags": [
+          "Comments"
+        ],
+        "description": "Retrieve a comment by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TaskId"
+          },
+          {
+            "$ref": "#/components/parameters/CommentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a comment",
+        "tags": [
+          "Comments"
+        ],
+        "description": "Update a comment by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TaskId"
+          },
+          {
+            "$ref": "#/components/parameters/CommentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a comment",
+        "tags": [
+          "Comments"
+        ],
+        "description": "Delete a comment by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TaskId"
+          },
+          {
+            "$ref": "#/components/parameters/CommentId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/payments": {
+      "get": {
+        "summary": "Get all payments",
+        "tags": [
+          "Payments"
+        ],
+        "description": "Retrieve a list of all payments by user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new payment",
+        "tags": [
+          "Payments"
+        ],
+        "description": "Create a new payment for a user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Payment created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/payments/{payment_id}": {
+      "get": {
+        "summary": "Get payment by ID",
+        "tags": [
+          "Payments"
+        ],
+        "description": "Retrieve a payment by its ID.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PaymentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/payments/{payment_id}/status": {
+      "patch": {
+        "summary": "Change payment status",
+        "tags": [
+          "Payments"
+        ],
+        "description": "Change the status of a payment.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentUpdateStatusRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PaymentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/PaymentResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "$/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/members": {
+      "get": {
+        "summary": "Get all members of a project",
+        "tags": [
+          "ProjectMembers"
+        ],
+        "description": "Retrieve a list of all members of a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectMemberResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new member to a project",
+        "tags": [
+          "ProjectMembers"
+        ],
+        "description": "Add a new member to a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectMemberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectMemberResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/members/{member_id}": {
+      "put": {
+        "summary": "Update the role of a member in a project",
+        "tags": [
+          "ProjectMembers"
+        ],
+        "description": "Update the role of a member in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/ProjectMemberId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectMemberUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectMemberResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a member from a project",
+        "tags": [
+          "ProjectMembers"
+        ],
+        "description": "Remove a member from a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/ProjectMemberId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Member removed successfully",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Member removed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "summary": "Get all projects",
+        "tags": [
+          "Projects"
+        ],
+        "description": "Retrieve a list of all projects.",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new project",
+        "tags": [
+          "Projects"
+        ],
+        "description": "Create a new project.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}": {
+      "get": {
+        "summary": "Get a project by ID",
+        "tags": [
+          "Projects"
+        ],
+        "description": "Retrieve a project by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update project",
+        "tags": [
+          "Projects"
+        ],
+        "description": "Update a project by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/tasks": {
+      "get": {
+        "summary": "Get all tasks in a project",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Retrieve a list of all tasks in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TaskResponse"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Create a new task in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExistsError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/tasks/{task_id}": {
+      "get": {
+        "summary": "Get a task by ID",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Retrieve a task by its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Update a task in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Delete a task from a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Task with id {task_id} deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/tasks/{task_id}/assign": {
+      "patch": {
+        "summary": "Assign a user to a task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Assign a user to a task in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateAssignRequest"
+              }
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/tasks/{task_id}/status": {
+      "patch": {
+        "summary": "Update the status of a task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Update the status of a task in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/tasks/{task_id}/priority": {
+      "patch": {
+        "summary": "Update the priority of a task",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Update the priority of a task in a project.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProjectId"
+          },
+          {
+            "$ref": "#/components/parameters/TaskId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdatePriorityRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": [
+          "System"
+        ],
+        "description": "Check the health status of the application.",
+        "responses": {
+          "200": {
+            "description": "Application is healthy.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metrics": {
+      "get": {
+        "summary": "Prometheus format",
+        "tags": [
+          "System"
+        ],
+        "description": "Returns application metrics in Prometheus format.",
+        "responses": {
+          "200": {
+            "description": "Application metrics in Prometheus format.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "summary": "Get all tasks",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Retrieve a list of all tasks without a filter by project ID.",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TaskResponse"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/database/init": {
+      "get": {
+        "summary": "Initialize database",
+        "tags": [
+          "System"
+        ],
+        "description": "Initialize the database tables.",
+        "responses": {
+          "201": {
+            "description": "Database tables successfully created or already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Tables successfully created or already exist"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Database initialization error: {error message}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

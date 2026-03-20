@@ -122,3 +122,54 @@ docker compose up -d
 
 Open in browser:
 http://localhost:3000/api/docs
+
+## OpenAPI JSON
+
+You can access the raw OpenAPI schema:
+http://localhost:3000/api/docs-json
+
+Or generate it locally:
+```bash
+npm run swagger:generate
+```
+
+Output file:
+- docs/swagger.json
+
+## Postman Collection
+
+Postman collection is generated automatically from OpenAPI using openapi-to-postmanv2.
+
+### Generate a collection
+
+```bash
+npm run docs:generate
+```
+
+This will:
+1. Generate OpenAPI schema
+2. Convert it to a Postman collection
+
+Output:
+- docs/postman_collection.json
+
+Import into Postman
+1. Open Postman
+2. Click Import
+3. Select:
+    ```text
+    docs/postman_collection.json
+    ```
+
+## Documentation workflow
+```text
+JSDoc (@swagger) → swagger-jsdoc → swagger.json → Postman collection
+```
+
+## ⚠️ Notes
+Swagger is generated from JSDoc comments in src/routes
+- Do not edit swagger.json manually
+- Always regenerate docs after API changes:
+```bash
+npm run docs:generate
+```

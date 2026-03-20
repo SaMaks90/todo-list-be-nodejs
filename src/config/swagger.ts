@@ -3,129 +3,132 @@ import swaggerJSDoc from "swagger-jsdoc";
 import { Express } from "express";
 import { swaggerSchemas } from "./swagger/";
 
-export const swaggerSetup = (app: Express) => {
-  const isProd = process.env.NODE_ENV === "production";
-  const options = {
-    definition: {
-      openapi: "3.0.0",
-      info: {
-        title: "Todo List API",
-        version: "1.0.0",
-        description: "Todo List Backend API Documentation.",
+const isProd: boolean = process.env.NODE_ENV === "production";
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Todo List API",
+      version: "1.0.0",
+      description: "Todo List Backend API Documentation.",
+    },
+    servers: [
+      {
+        url: isProd
+          ? "https://app-production-d9c3.up.railway.app"
+          : "http://localhost:3000",
       },
-      servers: [
-        {
-          url: isProd
-            ? "https://app-production-d9c3.up.railway.app"
-            : "http://localhost:3000",
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
-      ],
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
-        },
-        schemas: swaggerSchemas,
-        parameters: {
-          PaymentId: {
-            name: "payment_id",
-            in: "path",
-            required: true,
-            description: "Payment unique identifier",
-            schema: {
-              $ref: "#/components/schemas/PaymentIdParam",
-            },
-          },
-          ProjectId: {
-            name: "project_id",
-            in: "path",
-            required: true,
-            description: "Project unique identifier",
-            schema: {
-              $ref: "#/components/schemas/ProjectIdParam",
-            },
-          },
-          ProjectMemberId: {
-            name: "member_id",
-            in: "path",
-            required: true,
-            description: "Project member unique identifier",
-            schema: {
-              $ref: "#/components/schemas/ProjectMemberIdParam",
-            },
-          },
-          TaskId: {
-            name: "task_id",
-            in: "path",
-            required: true,
-            description: "Task unique identifier",
-            schema: {
-              $ref: "#/components/schemas/TaskIdParam",
-            },
-          },
-          CommentId: {
-            name: "comment_id",
-            in: "path",
-            required: true,
-            description: "Comment unique identifier",
-            schema: {
-              $ref: "#/components/schemas/CommentIdParam",
-            },
+      },
+      schemas: swaggerSchemas,
+      parameters: {
+        PaymentId: {
+          name: "payment_id",
+          in: "path",
+          required: true,
+          description: "Payment unique identifier",
+          schema: {
+            $ref: "#/components/schemas/PaymentIdParam",
           },
         },
-        responses: {
-          NotFoundError: {
-            description: "Not Found",
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ErrorNotFound",
-                },
+        ProjectId: {
+          name: "project_id",
+          in: "path",
+          required: true,
+          description: "Project unique identifier",
+          schema: {
+            $ref: "#/components/schemas/ProjectIdParam",
+          },
+        },
+        ProjectMemberId: {
+          name: "member_id",
+          in: "path",
+          required: true,
+          description: "Project member unique identifier",
+          schema: {
+            $ref: "#/components/schemas/ProjectMemberIdParam",
+          },
+        },
+        TaskId: {
+          name: "task_id",
+          in: "path",
+          required: true,
+          description: "Task unique identifier",
+          schema: {
+            $ref: "#/components/schemas/TaskIdParam",
+          },
+        },
+        CommentId: {
+          name: "comment_id",
+          in: "path",
+          required: true,
+          description: "Comment unique identifier",
+          schema: {
+            $ref: "#/components/schemas/CommentIdParam",
+          },
+        },
+      },
+      responses: {
+        NotFoundError: {
+          description: "Not Found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/ErrorNotFound",
               },
             },
           },
-          AlreadyExistsError: {
-            description: "Already Exists",
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ErrorAlreadyExists",
-                },
+        },
+        AlreadyExistsError: {
+          description: "Already Exists",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/ErrorAlreadyExists",
               },
             },
           },
-          ValidationError: {
-            description: "Validation error",
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ErrorValidation",
-                },
+        },
+        ValidationError: {
+          description: "Validation error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/ErrorValidation",
               },
             },
           },
-          UnauthorizedError: {
-            description: "Unauthorized - JWT token missing or invalid",
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ErrorUnauthorized",
-                },
+        },
+        UnauthorizedError: {
+          description: "Unauthorized - JWT token missing or invalid",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/ErrorUnauthorized",
               },
             },
           },
         },
       },
     },
-    apis: isProd
-      ? ["./dist/**/*.js"]
-      : ["./src/routes/**/*.ts", "./src/app.ts"],
-  };
+  },
+  apis: isProd ? ["./dist/**/*.js"] : ["./src/routes/**/*.ts", "./src/app.ts"],
+};
 
-  const specs = swaggerJSDoc(options);
+export const specs = swaggerJSDoc(options);
 
+export const swaggerSetup = (app: Express): void => {
   app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+  app.get("/api/docs-json", (_req, res) => {
+    res.json(specs);
+  });
 };
